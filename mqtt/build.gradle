@@ -31,10 +31,17 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
 }
 
 dependencies {
     implementation(project(":core"))
+
+    // ... HiveMq
+    api("com.hivemq:hivemq-mqtt-client:1.2.2")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
