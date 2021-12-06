@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.service.BaseService
 import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
+import dev.atick.mqtt.utils.publishOnce
+import dev.atick.mqtt.utils.simpleConnect
+import dev.atick.mqtt.utils.simpleSubscribe
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +37,7 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun doInBackground() {
-        TODO("Not yet implemented")
+        Logger.i("DO IN BACKGROUND")
     }
 
     override fun setupNotification(): Notification {
@@ -48,7 +51,7 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun collectGarbage() {
-        TODO("Not yet implemented")
+        client.disconnect()
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -56,18 +59,26 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun connect(broker: String?, onConnect: () -> Unit?) {
-        client.connect()
-            .thenAccept {
+        Logger.i("CONNECTING ... ")
+        client.simpleConnect(
+            onSuccess = { returnCode ->
+                Logger.i("RETURN CODE: [$returnCode]")
                 onConnect.invoke()
             }
+        )
     }
 
     override fun disconnect(onDisconnect: () -> Unit?) {
         TODO("Not yet implemented")
     }
 
-    override fun subscribe(topic: String, onSubscribe: () -> Unit?) {
-        TODO("Not yet implemented")
+    override fun publish(topic: String, message: String) {
+        client.publishOnce(topic, message)
+    }
+
+    override fun subscribe(topic: String, onSubscribe: (() -> Unit)?) {
+        Logger.i("SUBSCRIBING ... ")
+        client.simpleSubscribe("dev.atick.mqtt")
     }
 
     override fun unsubscribe(topic: String, onUnsubscribe: () -> Unit?) {
