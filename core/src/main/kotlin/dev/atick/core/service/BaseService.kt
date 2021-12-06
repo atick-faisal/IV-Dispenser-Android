@@ -15,7 +15,7 @@ abstract class BaseService : Service() {
     abstract fun initService()
     abstract fun doInBackground()
     abstract fun setupNotification(): Notification
-    abstract fun clear()
+    abstract fun collectGarbage()
 
     override fun onCreate() {
         super.onCreate()
@@ -31,6 +31,6 @@ abstract class BaseService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        clear()
+        collectGarbage()
     }
 }
