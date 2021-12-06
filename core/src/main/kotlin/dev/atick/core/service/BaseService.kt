@@ -20,11 +20,11 @@ abstract class BaseService : Service() {
     override fun onCreate() {
         super.onCreate()
         initService()
-        persistentNotification = setupNotification()
-        startForeground(PERSISTENT_NOTIFICATION_ID, persistentNotification)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        persistentNotification = setupNotification()
+        startForeground(PERSISTENT_NOTIFICATION_ID, persistentNotification)
         doInBackground()
         return START_STICKY
     }

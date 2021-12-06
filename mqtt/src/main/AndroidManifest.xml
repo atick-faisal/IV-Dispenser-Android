@@ -8,7 +8,6 @@
     <application>
         <service
             android:name=".service.MqttService"
-            android:description="Manage incoming and outgoing mqtt messages"
             android:directBootAware="false"
             android:enabled="true"
             android:exported="false"
