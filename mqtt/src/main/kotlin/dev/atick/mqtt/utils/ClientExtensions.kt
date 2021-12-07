@@ -7,7 +7,7 @@ import com.orhanobut.logger.Logger
 
 inline fun Mqtt3AsyncClient.simpleConnect(
     crossinline onSuccess: (Boolean) -> Unit,
-    crossinline onFailure: (Mqtt3ConnAckReturnCode) -> Unit = {}
+    noinline onFailure: ((Mqtt3ConnAckReturnCode) -> Unit)?
 ) {
     this.connectWith()
         .cleanSession(false)
@@ -25,7 +25,7 @@ inline fun Mqtt3AsyncClient.simpleConnect(
                 }
                 else -> {
                     Logger.i("CONNECTION FAILED! [${connAck.returnCode}]")
-                    onFailure(connAck.returnCode)
+                    onFailure?.invoke(connAck.returnCode)
                 }
             }
         }
@@ -34,8 +34,8 @@ inline fun Mqtt3AsyncClient.simpleConnect(
 inline fun Mqtt3AsyncClient.publishOnce(
     topic: String,
     message: String,
-    crossinline onSuccess: () -> Unit = {},
-    crossinline onFailure: () -> Unit = {}
+    crossinline onSuccess: () -> Unit,
+    noinline onFailure: ((Throwable) -> Unit)?
 ) {
     this.publishWith()
         .topic(topic)
@@ -46,8 +46,7 @@ inline fun Mqtt3AsyncClient.publishOnce(
         .whenComplete { _, throwable ->
             if (throwable != null) {
                 Logger.i("PUBLISH FAILED! [${message}]")
-                throwable.printStackTrace()
-                onFailure.invoke()
+                onFailure?.invoke(throwable)
             } else {
                 Logger.i("SUCCESSFULLY PUBLISHED! [${message}]")
                 onSuccess.invoke()
@@ -57,23 +56,58 @@ inline fun Mqtt3AsyncClient.publishOnce(
 
 inline fun Mqtt3AsyncClient.simpleSubscribe(
     topic: String,
-    crossinline onMessage: () -> Unit = {},
-    crossinline onSuccess: () -> Unit = {},
-    crossinline onFailure: () -> Unit = {}
+    crossinline onMessage: (String?) -> Unit,
+    crossinline onSuccess: () -> Unit,
+    noinline onFailure: ((Throwable) -> Unit)?
 ) {
     this.subscribeWith()
         .topicFilter(topic)
         .callback { message ->
             Logger.i("[${message.getTopicName()}] -> ${message.getContent()}")
+            onMessage.invoke(message.getContent())
         }
         .send()
         .whenComplete { _, throwable ->
             if (throwable != null) {
                 Logger.i("SUBSCRIPTION FAILED!")
-                throwable.printStackTrace()
-                onFailure.invoke()
+                onFailure?.invoke(throwable)
             } else {
                 Logger.i("SUBSCRIBED SUCCESSFULLY!")
+                onSuccess.invoke()
+            }
+        }
+}
+
+inline fun Mqtt3AsyncClient.simpleUnsubscribe(
+    topic: String,
+    crossinline onSuccess: () -> Unit,
+    noinline onFailure: ((Throwable) -> Unit)?
+) {
+    this.unsubscribeWith()
+        .topicFilter(topic)
+        .send()
+        .whenComplete { _, throwable ->
+            if (throwable != null) {
+                Logger.i("OPERATION FAILED!")
+                onFailure?.invoke(throwable)
+            } else {
+                Logger.i("UNSUBSCRIBED SUCCESSFULLY!")
+                onSuccess.invoke()
+            }
+        }
+}
+
+inline fun Mqtt3AsyncClient.simpleDisconnect(
+    crossinline onSuccess: () -> Unit,
+    noinline onFailure: ((Throwable) -> Unit)?
+) {
+    this.disconnect()
+        .whenComplete { _, throwable ->
+            if (throwable != null) {
+                Logger.i("OPERATION FAILED!")
+                onFailure?.invoke(throwable)
+            } else {
+                Logger.i("DISCONNECTED SUCCESSFULLY!")
                 onSuccess.invoke()
             }
         }

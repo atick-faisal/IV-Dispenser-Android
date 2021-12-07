@@ -9,11 +9,10 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.service.BaseService
+import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
-import dev.atick.mqtt.utils.publishOnce
-import dev.atick.mqtt.utils.simpleConnect
-import dev.atick.mqtt.utils.simpleSubscribe
+import dev.atick.mqtt.utils.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,41 +50,74 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun collectGarbage() {
-        client.disconnect()
+        this.disconnect {
+            debugMessage("Disconnected")
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder {
         return binder
     }
 
-    override fun connect(broker: String?, onConnect: () -> Unit?) {
+    override fun connect(broker: String?, onConnect: () -> Unit) {
         Logger.i("CONNECTING ... ")
         client.simpleConnect(
             onSuccess = { returnCode ->
                 Logger.i("RETURN CODE: [$returnCode]")
                 onConnect.invoke()
+            },
+            onFailure = {
+                debugMessage(it.name)
             }
         )
     }
 
-    override fun disconnect(onDisconnect: () -> Unit?) {
-        TODO("Not yet implemented")
+    override fun disconnect(onDisconnect: () -> Unit) {
+        client.simpleDisconnect(
+            onSuccess = onDisconnect,
+            onFailure = {
+                debugMessage("Failed to Disconnect")
+                it.printStackTrace()
+            }
+        )
     }
 
     override fun publish(topic: String, message: String) {
-        client.publishOnce(topic, message)
+        Logger.i("PUBLISHING ... ")
+        client.publishOnce(
+            topic = topic,
+            message = message,
+            onSuccess = {
+                debugMessage("Message Sent Successfully")
+            },
+            onFailure = {
+                debugMessage("Failed to Send Message")
+                it.printStackTrace()
+            }
+        )
     }
 
-    override fun subscribe(topic: String, onSubscribe: (() -> Unit)?) {
+    override fun subscribe(topic: String, onSubscribe: () -> Unit, onMessage: (String?) -> Unit) {
         Logger.i("SUBSCRIBING ... ")
-        client.simpleSubscribe("dev.atick.mqtt")
+        client.simpleSubscribe(
+            topic = topic,
+            onMessage = onMessage,
+            onSuccess = onSubscribe,
+            onFailure = {
+                debugMessage("Failed to Subscribe")
+                it.printStackTrace()
+            }
+        )
     }
 
-    override fun unsubscribe(topic: String, onUnsubscribe: () -> Unit?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun listen(topic: String, onMessage: (message: String) -> Unit) {
-        TODO("Not yet implemented")
+    override fun unsubscribe(topic: String, onUnsubscribe: () -> Unit) {
+        client.simpleUnsubscribe(
+            topic = topic,
+            onSuccess = onUnsubscribe,
+            onFailure = {
+                debugMessage("Failed to Unsubscribe")
+                it.printStackTrace()
+            }
+        )
     }
 }
