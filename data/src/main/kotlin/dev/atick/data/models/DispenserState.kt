@@ -1,13 +1,15 @@
-package dev.atick.compose.database.room.models
+package dev.atick.data.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Entity(
     tableName = "dispenser_state_table"
 )
+@Serializable
 data class DispenserState(
     @PrimaryKey(autoGenerate = true)
     @SerialName("id")

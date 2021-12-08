@@ -1,4 +1,4 @@
-package dev.atick.compose.database.room.models
+package dev.atick.data.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

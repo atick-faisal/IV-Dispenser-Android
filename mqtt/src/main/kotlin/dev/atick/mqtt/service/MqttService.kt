@@ -51,7 +51,11 @@ class MqttService : BaseService(), MqttRepository {
 
     override fun onStartService() {
         Logger.i("STARTING MQTT SERVICE")
-
+        _isClientConnected.value?.let { isClientConnected ->
+            if (!isClientConnected) {
+                connect(null) {}
+            }
+        }
     }
 
     override fun setupNotification(): Notification {
@@ -117,7 +121,9 @@ class MqttService : BaseService(), MqttRepository {
         Logger.i("SUBSCRIBING ... ")
         client.simpleSubscribe(
             topic = topic,
-            onMessage = onMessage,
+            onMessage = {
+                onMessage.invoke(it)
+            },
             onSuccess = onSubscribe,
             onFailure = {
                 debugMessage("Failed to Subscribe")

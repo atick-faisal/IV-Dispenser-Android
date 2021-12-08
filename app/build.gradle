@@ -74,12 +74,10 @@ android {
 
 dependencies {
     implementation project(path: ':core')
+    implementation project(path: ':data')
     implementation project(path: ':mqtt')
 
     // ... Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
-
-    // ... Serialization
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
 }

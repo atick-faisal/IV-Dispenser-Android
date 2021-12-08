@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
 }
 
@@ -31,18 +32,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    packagingOptions {
-        exclude 'META-INF/INDEX.LIST'
-        exclude 'META-INF/io.netty.versions.properties'
-    }
 }
 
 dependencies {
     implementation(project(":core"))
-    implementation project(path: ':data')
-
-    // ... HiveMq
-    api("com.hivemq:hivemq-mqtt-client:1.2.2")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
