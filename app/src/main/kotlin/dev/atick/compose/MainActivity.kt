@@ -6,13 +6,14 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import androidx.activity.compose.setContent
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.utils.NetworkUtils
 import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.mqtt.repository.MqttRepository
 import dev.atick.mqtt.service.MqttService
+import java.util.logging.Logger
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -31,11 +32,11 @@ class MainActivity : AppCompatActivity() {
 
             mqttRepository.connect(null) {
                 mqttRepository.subscribe(
-                    topic = "dev.atick.mqtt",
+                    topic = "dev.atick.mqtt/#",
                     onSubscribe = {},
                     onMessage = {
                         it?.let {
-                            debugMessage(it)
+
                         }
                     }
                 )
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         networkUtils = NetworkUtils(this)
         networkUtils.isInternetAvailable.observe(this@MainActivity, {
             it?.let {
@@ -66,8 +68,6 @@ class MainActivity : AppCompatActivity() {
                 // debugMessage("WIFI AVAILABLE [$it]")
             }
         })
-
-        setContent { }
         startMqttService()
     }
 

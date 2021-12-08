@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
 }
 
@@ -52,6 +53,9 @@ dependencies {
     api("androidx.appcompat:appcompat:1.4.0")
     api("com.google.android.material:material:1.4.0")
 
+    // ... Fragment
+    api("androidx.fragment:fragment-ktx:1.4.0")
+
     // ... Jetpack Compose
     api("androidx.compose.ui:ui:$compose_version")
     api("androidx.compose.ui:ui-tooling:$compose_version")
@@ -67,6 +71,10 @@ dependencies {
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
+
+    // ... Navigation
+    api("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    api("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // ... Room
     api("androidx.room:room-runtime:$room_version")
