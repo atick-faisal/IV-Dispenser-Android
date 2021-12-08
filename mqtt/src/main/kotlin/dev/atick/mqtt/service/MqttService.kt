@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,13 +15,15 @@ import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
 import dev.atick.mqtt.utils.*
-import javax.inject.Inject
+import java.util.*
 
 @AndroidEntryPoint
 class MqttService : BaseService(), MqttRepository {
 
-    @Inject
-    lateinit var client: Mqtt3AsyncClient
+    private lateinit var client: Mqtt3AsyncClient
+    private val _isClientConnected = MutableLiveData<Boolean>()
+    val isClientConnected: LiveData<Boolean>
+        get() = _isClientConnected
 
     companion object {
         const val MQTT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt"
@@ -30,6 +34,20 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     private val binder = LocalBinder()
+
+    override fun onCreateService() {
+        super.onCreateService()
+        client = setUpDefaultMqtt3Client(
+            onConnected = {
+                Logger.i("MQTT CLIENT CONNECTED!")
+                _isClientConnected.postValue(true)
+            },
+            onDisconnected = {
+                Logger.i("MQTT CLIENT DISCONNECTED")
+                _isClientConnected.postValue(false)
+            }
+        )
+    }
 
     override fun onStartService() {
         Logger.i("STARTING MQTT SERVICE")
@@ -85,6 +103,7 @@ class MqttService : BaseService(), MqttRepository {
             topic = topic,
             message = message,
             onSuccess = {
+                Logger.i("MESSAGE SENT SUCCESSFULLY")
                 debugMessage("Message Sent Successfully")
             },
             onFailure = {

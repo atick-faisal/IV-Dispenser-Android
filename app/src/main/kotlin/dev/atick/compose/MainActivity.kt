@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.utils.NetworkUtils
 import dev.atick.core.utils.extensions.debugMessage
@@ -31,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             mBound = true
 
             mqttRepository.connect(null) {
-                Logger.i("MQTT CONNECTED!")
                 mqttRepository.subscribe(
                     topic = "dev.atick.mqtt",
                     onSubscribe = {},
@@ -43,7 +41,11 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-
+            mqttService.isClientConnected.observe(this@MainActivity, {
+                it?.let {
+                    debugMessage("Client Connected [$it]")
+                }
+            })
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -61,9 +63,10 @@ class MainActivity : AppCompatActivity() {
         })
         networkUtils.isWiFiAvailable.observe(this@MainActivity, {
             it?.let {
-                debugMessage("WIFI AVAILABLE [$it]")
+                // debugMessage("WIFI AVAILABLE [$it]")
             }
         })
+
         setContent { }
         startMqttService()
     }

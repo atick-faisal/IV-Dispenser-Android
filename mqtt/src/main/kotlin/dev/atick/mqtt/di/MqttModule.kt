@@ -27,6 +27,7 @@ object MqttModule {
             .identifier(UUID.randomUUID().toString())
             .serverHost(BROKER_URL)
             .serverPort(1883)
+            .automaticReconnectWithDefaultConfig()
             .buildAsync()
     }
 
@@ -37,6 +38,7 @@ object MqttModule {
             .identifier(UUID.randomUUID().toString())
             .serverHost(BROKER_URL)
             .serverPort(1883)
+            .automaticReconnectWithDefaultConfig()
             .buildAsync()
     }
 
