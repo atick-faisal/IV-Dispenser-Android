@@ -31,12 +31,9 @@ class MqttService : BaseService(), MqttRepository {
 
     private val binder = LocalBinder()
 
-    override fun initService() {
+    override fun onStartService() {
+        Logger.i("STARTING MQTT SERVICE")
 
-    }
-
-    override fun doInBackground() {
-        Logger.i("DO IN BACKGROUND")
     }
 
     override fun setupNotification(): Notification {
