@@ -61,13 +61,17 @@ dependencies {
     api("androidx.compose.material:material-icons-extended:$compose_version")
     api 'androidx.activity:activity-compose:1.4.0'
 
-
     // ... Lifecycle
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
+
+    // ... Room
+    api("androidx.room:room-runtime:$room_version")
+    api("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")

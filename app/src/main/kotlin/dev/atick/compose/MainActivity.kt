@@ -10,6 +10,8 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import dev.atick.core.utils.NetworkUtils
+import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.mqtt.repository.MqttRepository
 import dev.atick.mqtt.service.MqttService
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mqttService: MqttService
     private lateinit var mqttRepository: MqttRepository
     private var mBound: Boolean = false
+    private lateinit var networkUtils: NetworkUtils
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -29,8 +32,18 @@ class MainActivity : AppCompatActivity() {
 
             mqttRepository.connect(null) {
                 Logger.i("MQTT CONNECTED!")
-                mqttRepository.subscribe("dev.atick.mqtt", null)
+                mqttRepository.subscribe(
+                    topic = "dev.atick.mqtt",
+                    onSubscribe = {},
+                    onMessage = {
+                        it?.let {
+                            debugMessage(it)
+                        }
+                    }
+                )
             }
+
+
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -40,6 +53,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        networkUtils = NetworkUtils(this)
+        networkUtils.isInternetAvailable.observe(this@MainActivity, {
+            it?.let {
+                // debugMessage("INTERNET AVAILABLE [$it]")
+            }
+        })
+        networkUtils.isWiFiAvailable.observe(this@MainActivity, {
+            it?.let {
+                debugMessage("WIFI AVAILABLE [$it]")
+            }
+        })
         setContent { }
         startMqttService()
     }
