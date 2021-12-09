@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.atick.compose.utils.getFormattedDateTime
 import dev.atick.data.models.Dispenser
 
 @Composable
@@ -32,55 +33,60 @@ fun DispenserItem(
         elevation = 2.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Row(
+        Column(
             Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Column(
-                Modifier
-                    .weight(0.4F)
+            Text(
+                text = "Last Updated: ${getFormattedDateTime(dispenser.timestamp)}",
+                color = Color.LightGray,
+                fontSize = 12.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                Modifier.fillMaxSize()
             ) {
-                Text(
-                    text = dispenser.timestamp.toString(),
-                    color = Color.LightGray,
-                    fontSize = 12.sp
-                )
+                Column(
+                    Modifier.weight(0.4F)
+                ) {
 
-                Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "Room No.")
+                    Text(text = "Room No.")
 
-                Text(
-                    text = dispenser.room.toString(),
-                    color = Color.DarkGray,
-                    fontSize = 48.sp,
-                    fontWeight = FontWeight.Thin
-                )
-            }
+                    Text(
+                        text = dispenser.room.toString(),
+                        color = Color.DarkGray,
+                        fontSize = 48.sp,
+                        fontWeight = FontWeight.Thin
+                    )
+                }
 
-            Column(
-                Modifier
-                    .weight(0.6F)
-            ) {
-                SensorItem(
-                    icon = Icons.Filled.InvertColors,
-                    "${dispenser.dripRate} drips/min"
-                )
+                Column(
+                    Modifier
+                        .weight(0.6F)
+                ) {
+                    SensorItem(
+                        icon = Icons.Filled.InvertColors,
+                        "${dispenser.dripRate} drips/min"
+                    )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                SensorItem(
-                    icon = Icons.Filled.Air,
-                    value = "${dispenser.flowRate} mL/h"
-                )
+                    SensorItem(
+                        icon = Icons.Filled.Air,
+                        value = "${dispenser.flowRate} mL/h"
+                    )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                SensorItem(
-                    icon = Icons.Filled.Water,
-                    value = "${dispenser.urineOut} mL"
-                )
+                    SensorItem(
+                        icon = Icons.Filled.Water,
+                        value = "${dispenser.urineOut} mL"
+                    )
+                }
             }
         }
     }

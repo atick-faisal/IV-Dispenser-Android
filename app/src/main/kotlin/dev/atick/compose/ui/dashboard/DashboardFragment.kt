@@ -24,8 +24,9 @@ class DashboardFragment : BaseComposeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dashboardFragmentArgs.deviceId?.let {
-            viewModel.fetchDispenserStates(it)
+        val deviceId = dashboardFragmentArgs.deviceId
+        deviceId?.let { id ->
+            viewModel.fetchDispenserStates(id)
         }
     }
 }

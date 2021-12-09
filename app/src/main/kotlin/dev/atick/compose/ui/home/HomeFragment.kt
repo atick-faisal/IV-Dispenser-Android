@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
 import dev.atick.core.utils.extensions.debugMessage
+import dev.atick.core.utils.extensions.observeEvent
 import dev.atick.mqtt.repository.MqttRepository
 import dev.atick.mqtt.service.MqttService
 
@@ -40,11 +41,9 @@ class HomeFragment : BaseComposeFragment() {
                 )
             }
 
-            mqttService.isClientConnected.observe(this@HomeFragment, {
-                it?.let {
-                    context?.debugMessage("Client Connected [$it]")
-                }
-            })
+            this@HomeFragment.observeEvent(mqttService.isClientConnected) {
+                context?.debugMessage("Client Connected [$it]")
+            }
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
