@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.compose.runtime.Composable
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
@@ -67,7 +68,13 @@ class HomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            HomeScreen()
+            HomeScreen(::navigateToDashboardFragment)
         }
+    }
+
+    private fun navigateToDashboardFragment(deviceId: String) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToDashboardFragment(deviceId)
+        )
     }
 }

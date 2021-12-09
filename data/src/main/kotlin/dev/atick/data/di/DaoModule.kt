@@ -17,6 +17,6 @@ object DaoModule {
 
     @Singleton
     @Provides
-    fun provideItemDao(appDatabase: AppDatabase) = appDatabase.dispenserDao
+    fun provideDispenserDao(appDatabase: AppDatabase) = appDatabase.dispenserDao()
 
 }

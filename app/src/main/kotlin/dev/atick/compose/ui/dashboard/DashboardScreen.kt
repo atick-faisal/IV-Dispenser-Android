@@ -1,6 +1,5 @@
-package dev.atick.compose.ui.home
+package dev.atick.compose.ui.dashboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,19 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun HomeScreen(
-    onDispenserClick: (String) -> Unit,
-    viewModel: HomeViewModel = viewModel()
+fun DashboardScreen(
+    viewModel: DashboardViewModel = viewModel()
 ) {
-    val dispensers = viewModel.dispensers.observeAsState()
+    val dispenserStates = viewModel.dispenserStates.observeAsState()
 
     return Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
-            items(dispensers.value ?: listOf()) {
-                Text(
-                    modifier = Modifier.clickable { onDispenserClick.invoke(it.deviceId) },
-                    text = it.deviceId
-                )
+            items(dispenserStates.value ?: listOf()) {
+                Text(text = it.flowRate.toString())
             }
         }
     }

@@ -7,5 +7,19 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="dev.atick.compose.ui.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="dev.atick.compose.ui.dashboard.DashboardFragment"
+        android:label="DashboardFragment" >
+        <argument
+            android:name="device_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </fragment>
 </navigation>

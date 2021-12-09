@@ -64,7 +64,8 @@ dependencies {
     api("androidx.compose.material:material:$compose_version")
     api("androidx.compose.material:material-icons-core:$compose_version")
     api("androidx.compose.material:material-icons-extended:$compose_version")
-    api 'androidx.activity:activity-compose:1.4.0'
+    api("androidx.compose.runtime:runtime-livedata:$compose_version")
+    api("androidx.activity:activity-compose:1.4.0")
 
     // ... Lifecycle
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -73,14 +74,12 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     api("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
+    // ... Coroutine
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
     // ... Navigation
     api("androidx.navigation:navigation-fragment-ktx:$nav_version")
     api("androidx.navigation:navigation-ui-ktx:$nav_version")
-
-    // ... Room
-    api("androidx.room:room-runtime:$room_version")
-    api("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
 
     // ... Serialization
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")

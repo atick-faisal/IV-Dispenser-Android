@@ -11,14 +11,14 @@ import kotlinx.serialization.Serializable
 )
 @Serializable
 data class Dispenser(
+    @ColumnInfo(name = "timestamp")
+    @SerialName("timestamp")
+    val timestamp: Long = System.currentTimeMillis(),
+
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "device_id")
     @SerialName("device_id")
     val deviceId: String,
-
-    @ColumnInfo(name = "timestamp")
-    @SerialName("timestamp")
-    val timestamp: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "room")
     @SerialName("room")

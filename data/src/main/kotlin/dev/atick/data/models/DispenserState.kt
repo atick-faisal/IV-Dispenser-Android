@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Entity(
     tableName = "dispenser_state_table"
@@ -12,8 +13,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DispenserState(
     @PrimaryKey(autoGenerate = true)
-    @SerialName("id")
-    val id: Long,
+    @Transient
+    val id: Long = 0,
 
     @ColumnInfo(name = "timestamp")
     @SerialName("timestamp")

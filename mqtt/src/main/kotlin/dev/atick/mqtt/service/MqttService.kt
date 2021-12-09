@@ -12,13 +12,24 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.service.BaseService
 import dev.atick.core.utils.extensions.debugMessage
+import dev.atick.data.database.room.DispenserDao
+import dev.atick.data.models.Dispenser
+import dev.atick.data.models.DispenserState
 import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
 import dev.atick.mqtt.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MqttService : BaseService(), MqttRepository {
+
+    @Inject
+    lateinit var dispenserDao: DispenserDao
 
     private lateinit var client: Mqtt3AsyncClient
     private val _isClientConnected = MutableLiveData<Boolean>()
@@ -122,6 +133,7 @@ class MqttService : BaseService(), MqttRepository {
         client.simpleSubscribe(
             topic = topic,
             onMessage = {
+                saveToDatabase(it)
                 onMessage.invoke(it)
             },
             onSuccess = onSubscribe,
@@ -141,5 +153,20 @@ class MqttService : BaseService(), MqttRepository {
                 it.printStackTrace()
             }
         )
+    }
+
+    private fun saveToDatabase(item: String?) {
+        item?.let {
+            try {
+                val dispenser = Json.decodeFromString(Dispenser.serializer() ,item)
+                val dispenserState = Json.decodeFromString(DispenserState.serializer() ,item)
+                CoroutineScope(Dispatchers.IO).launch {
+                    dispenserDao.insert(dispenser)
+                    dispenserDao.insert(dispenserState)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

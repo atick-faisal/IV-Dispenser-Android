@@ -6,7 +6,7 @@ import dev.atick.data.models.Dispenser
 import dev.atick.data.models.DispenserState
 
 @Database(
-    version = 1,
+    version = 3,
     exportSchema = false,
     entities = [
         Dispenser::class,
@@ -14,6 +14,5 @@ import dev.atick.data.models.DispenserState
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract val dispenserDao: DispenserDao
-    abstract val dispenserStateDao: DispenserStateDao
+    abstract fun dispenserDao(): DispenserDao
 }

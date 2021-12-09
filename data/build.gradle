@@ -37,6 +37,11 @@ android {
 dependencies {
     implementation(project(":core"))
 
+    // ... Room
+    api("androidx.room:room-runtime:$room_version")
+    api("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
