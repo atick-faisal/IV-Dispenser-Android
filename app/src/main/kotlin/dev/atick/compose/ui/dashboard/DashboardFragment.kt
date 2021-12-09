@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
+import dev.atick.core.utils.extensions.debugMessage
 
 @AndroidEntryPoint
 class DashboardFragment : BaseComposeFragment() {
@@ -25,6 +26,7 @@ class DashboardFragment : BaseComposeFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val deviceId = dashboardFragmentArgs.deviceId
+        requireContext().debugMessage(deviceId.toString())
         deviceId?.let { id ->
             viewModel.fetchDispenserStates(id)
         }

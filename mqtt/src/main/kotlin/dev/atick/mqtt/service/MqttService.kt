@@ -64,7 +64,13 @@ class MqttService : BaseService(), MqttRepository {
 
     override fun onStartService() {
         Logger.i("STARTING MQTT SERVICE")
-        connect(null) {}
+        connect(null) {
+            subscribe(
+                topic = "dev.atick.mqtt/#",
+                onSubscribe = {},
+                onMessage = {}
+            )
+        }
     }
 
     override fun setupNotification(): Notification {
