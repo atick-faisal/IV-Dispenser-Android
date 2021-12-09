@@ -15,12 +15,12 @@ class NetworkUtils(context: Context) {
         Context.CONNECTIVITY_SERVICE
     ) as ConnectivityManager
 
-    private val _isInternetAvailable = MutableLiveData<Boolean>()
-    val isInternetAvailable: LiveData<Boolean>
+    private val _isInternetAvailable = MutableLiveData<Event<Boolean>>()
+    val isInternetAvailable: LiveData<Event<Boolean>>
         get() = _isInternetAvailable
 
-    private val _isWiFiAvailable = MutableLiveData<Boolean>()
-    val isWiFiAvailable: LiveData<Boolean>
+    private val _isWiFiAvailable = MutableLiveData<Event<Boolean>>()
+    val isWiFiAvailable: LiveData<Event<Boolean>>
         get() = _isWiFiAvailable
 
     init {
@@ -28,8 +28,8 @@ class NetworkUtils(context: Context) {
             ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                _isInternetAvailable.postValue(true)
-                _isWiFiAvailable.postValue(!connectivityManager.isActiveNetworkMetered)
+                _isInternetAvailable.postValue(Event(true))
+                _isWiFiAvailable.postValue(Event(!connectivityManager.isActiveNetworkMetered))
                 Logger.i("NETWORK CONNECTED")
             }
 
@@ -40,8 +40,8 @@ class NetworkUtils(context: Context) {
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-                _isInternetAvailable.postValue(false)
-                _isWiFiAvailable.postValue(false)
+                _isInternetAvailable.postValue(Event(false))
+                _isWiFiAvailable.postValue(Event(false))
                 Logger.i("NETWORK CONNECTION LOST")
             }
 

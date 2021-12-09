@@ -11,6 +11,7 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.service.BaseService
+import dev.atick.core.utils.Event
 import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.Dispenser
@@ -32,8 +33,8 @@ class MqttService : BaseService(), MqttRepository {
     lateinit var dispenserDao: DispenserDao
 
     private lateinit var client: Mqtt3AsyncClient
-    private val _isClientConnected = MutableLiveData<Boolean>()
-    val isClientConnected: LiveData<Boolean>
+    private val _isClientConnected = MutableLiveData<Event<Boolean>>()
+    val isClientConnected: LiveData<Event<Boolean>>
         get() = _isClientConnected
 
     companion object {
@@ -51,22 +52,19 @@ class MqttService : BaseService(), MqttRepository {
         client = setUpDefaultMqtt3Client(
             onConnected = {
                 Logger.i("MQTT CLIENT CONNECTED!")
-                _isClientConnected.postValue(true)
+                _isClientConnected.postValue(Event(true))
             },
             onDisconnected = {
                 Logger.i("MQTT CLIENT DISCONNECTED")
-                _isClientConnected.postValue(false)
+                _isClientConnected.postValue(Event(false))
             }
         )
+
     }
 
     override fun onStartService() {
         Logger.i("STARTING MQTT SERVICE")
-        _isClientConnected.value?.let { isClientConnected ->
-            if (!isClientConnected) {
-                connect(null) {}
-            }
-        }
+        connect(null) {}
     }
 
     override fun setupNotification(): Notification {
@@ -90,16 +88,18 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun connect(broker: String?, onConnect: () -> Unit) {
-        Logger.i("CONNECTING ... ")
-        client.simpleConnect(
-            onSuccess = { returnCode ->
-                Logger.i("RETURN CODE: [$returnCode]")
-                onConnect.invoke()
-            },
-            onFailure = {
-                debugMessage(it.name)
-            }
-        )
+        if (_isClientConnected.value?.peekContent() != true) {
+            Logger.i("CONNECTING ... ")
+            client.simpleConnect(
+                onSuccess = { returnCode ->
+                    Logger.i("RETURN CODE: [$returnCode]")
+                    onConnect.invoke()
+                },
+                onFailure = {
+                    debugMessage(it.name)
+                }
+            )
+        }
     }
 
     override fun disconnect(onDisconnect: () -> Unit) {
@@ -158,8 +158,8 @@ class MqttService : BaseService(), MqttRepository {
     private fun saveToDatabase(item: String?) {
         item?.let {
             try {
-                val dispenser = Json.decodeFromString(Dispenser.serializer() ,item)
-                val dispenserState = Json.decodeFromString(DispenserState.serializer() ,item)
+                val dispenser = Json.decodeFromString(Dispenser.serializer(), item)
+                val dispenserState = Json.decodeFromString(DispenserState.serializer(), item)
                 CoroutineScope(Dispatchers.IO).launch {
                     dispenserDao.insert(dispenser)
                     dispenserDao.insert(dispenserState)
