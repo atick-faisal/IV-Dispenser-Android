@@ -20,6 +20,6 @@
             android:name="device_id"
             app:argType="string"
             app:nullable="true"
-            android:defaultValue="null" />
+            android:defaultValue="duf8d78g7897dg" />
     </fragment>
 </navigation>

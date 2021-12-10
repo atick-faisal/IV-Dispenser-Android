@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MqttModule {
 
-    const val BROKER_URL = "broker.hivemq.com"
+    const val BROKER_URL = "broker.emqx.io"
 
     @Singleton
     @Provides

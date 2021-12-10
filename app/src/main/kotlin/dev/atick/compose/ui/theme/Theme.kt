@@ -5,6 +5,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -40,7 +43,14 @@ fun DispenserTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = Typography.copy(
+            h1 = TextStyle(
+                color = Color.DarkGray,
+                fontSize = 48.sp,
+
+
+            )
+        ),
         shapes = Shapes,
         content = content
     )
