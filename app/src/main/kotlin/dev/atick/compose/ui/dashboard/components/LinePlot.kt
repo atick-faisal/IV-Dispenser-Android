@@ -1,7 +1,12 @@
 package dev.atick.compose.ui.dashboard.components
 
+import ai.atick.material.MaterialColor
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -16,6 +21,9 @@ fun LinePlot(
     dataset: LineDataSet,
     modifier: Modifier = Modifier
 ) {
+
+    val isDarkThemeEnabled = isSystemInDarkTheme()
+
     AndroidView(
         factory = { ctx ->
             LineChart(ctx).apply {
@@ -24,10 +32,10 @@ fun LinePlot(
                 axisLeft.isEnabled = true
                 axisLeft.setDrawGridLines(false)
                 axisLeft.axisLineWidth = 3.0F
-                axisLeft.axisLineColor = R.color.dark_gray
+//                axisLeft.axisLineColor = R.style.,
                 axisLeft.setDrawLabels(true)
-                axisLeft.zeroLineColor = R.color.dark_gray
-                axisLeft.textColor = R.color.dark_gray
+//                axisLeft.zeroLineColor = R.color.dark_gray
+//                axisLeft.textColor = R.attr.colorOnSurface
                 axisLeft.labelCount = 5
                 axisRight.setDrawLabels(false)
                 axisRight.isEnabled = false
@@ -36,7 +44,7 @@ fun LinePlot(
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 xAxis.setDrawGridLines(false)
                 xAxis.axisLineWidth = 3.0F
-                xAxis.textColor = R.color.dark_gray
+//                xAxis.textColor = R.color.dark_gray
                 xAxis.labelCount = 5
                 xAxis.valueFormatter = object : IndexAxisValueFormatter() {
                     override fun getFormattedValue(value: Float): String {

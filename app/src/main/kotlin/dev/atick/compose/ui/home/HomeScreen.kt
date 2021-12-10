@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -23,7 +24,7 @@ fun HomeScreen(
     return Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialColor.BlueGray50)
+            .background(MaterialTheme.colors.background)
     ) {
 
         TopBar()
@@ -39,10 +40,6 @@ fun HomeScreen(
                 )
         ) {
             items(dispensers.value ?: listOf()) {
-//                Text(
-//                    modifier = Modifier.clickable { onDispenserClick.invoke(it.deviceId) },
-//                    text = it.deviceId
-//                )
                 DispenserItem(dispenser = it, onClick = { deviceId ->
                     onDispenserClick.invoke(deviceId)
                 })

@@ -19,6 +19,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
     private lateinit var dispenserStates: LiveData<List<DispenserState>>
     lateinit var lastState: LiveData<DispenserState>
     lateinit var urinePercentage: LiveData<Float>
+    lateinit var urineOutDataset: LiveData<LineDataSet>
     lateinit var dripRateDataset: LiveData<LineDataSet>
 
     fun fetchDispenserStates(deviceId: String) {
@@ -50,7 +51,22 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                         )
                     )
                 }
-                LineDataSet(entries, "DripRate")
+                LineDataSet(entries, "Drip Rate")
+            }
+        }
+        urineOutDataset = Transformations.map(dispenserStates) { dispenserStates ->
+            val entries = mutableListOf<Entry>()
+            if (dispenserStates.isEmpty()) LineDataSet(entries, "Urine Out")
+            else {
+                dispenserStates.reversed().forEach { dispenserState ->
+                    entries.add(
+                        Entry(
+                            dispenserState.timestamp.toFloat(),
+                            dispenserState.urineOut
+                        )
+                    )
+                }
+                LineDataSet(entries, "Urine Out")
             }
         }
     }

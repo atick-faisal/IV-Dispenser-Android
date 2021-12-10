@@ -1,10 +1,12 @@
 package dev.atick.compose.ui.home.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,7 +27,8 @@ fun TopBar(
             bottomStart = 16.dp,
             bottomEnd = 16.dp
         ),
-        elevation = 4.dp
+        elevation = if (isSystemInDarkTheme()) 0.dp else 4.dp,
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Row(
             modifier = Modifier
@@ -34,7 +37,6 @@ fun TopBar(
         ) {
             Text(
                 text = "I/V Dispensers",
-                color = Color.DarkGray,
                 fontSize = 20.sp
             )
         }

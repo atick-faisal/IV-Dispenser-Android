@@ -5,6 +5,7 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,15 +40,6 @@ fun WaterProgress(
                 LottieAnimationView(ctx).apply {
                     setAnimation(R.raw.urine_out)
                     repeatCount = ValueAnimator.INFINITE
-//                    setMinFrame(
-//                        if (progress <= 0.1F) 0
-//                        else (226 * (progress - 0.1F)).toInt()
-//                    )
-//                    setMaxFrame(
-//                        if (progress >= 0.9F) 226
-//                        else (226 * (progress + 0.1F)).toInt()
-//                    )
-
                     repeatMode = LottieDrawable.REVERSE
                     speed = 0.1F
                     playAnimation()
@@ -70,15 +62,13 @@ fun WaterProgress(
         ) {
             Text(
                 text = title,
-                color = Color.DarkGray,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Light
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = "$value mL",
-                color = Color.DarkGray,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colors.onSurface
             )
         }
     }
