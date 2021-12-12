@@ -20,7 +20,7 @@ private val DarkColorPalette = darkColors(
     primaryVariant = MaterialColor.Green600,
     secondary = MaterialColor.Orange700,
     secondaryVariant = MaterialColor.Orange600,
-    background = MaterialColor.BlueGray800,
+    background = Color(0xFF_2E3440),
     surface = MaterialColor.BlueGray900,
     error = MaterialColor.Red700,
     onPrimary = MaterialColor.White,
@@ -31,8 +31,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = MaterialColor.Green400,
-    primaryVariant = MaterialColor.Green300,
+    primary = MaterialColor.Green700,
+    primaryVariant = MaterialColor.Green600,
     secondary = MaterialColor.Orange400,
     secondaryVariant = MaterialColor.Orange600,
     background = MaterialColor.BlueGray50,
@@ -56,14 +56,14 @@ fun DispenserTheme(
         LightColorPalette
     }
 
-    val fontFamily = FontFamily(
-        Font(R.font.fira_sans_thin, FontWeight.Thin),
-        Font(R.font.fira_sans_light, FontWeight.Light),
-        Font(R.font.fira_sans_regular, FontWeight.Normal),
-        Font(R.font.fira_sans_medium, FontWeight.Medium),
-        Font(R.font.fira_sans_bold, FontWeight.Bold),
-        Font(R.font.fira_sans_italic, FontWeight.Normal, FontStyle.Italic),
-    )
+//    val fontFamily = FontFamily(
+//        Font(R.font.fira_sans_thin, FontWeight.Thin),
+//        Font(R.font.fira_sans_light, FontWeight.Light),
+//        Font(R.font.fira_sans_regular, FontWeight.Normal),
+//        Font(R.font.fira_sans_medium, FontWeight.Medium),
+//        Font(R.font.fira_sans_bold, FontWeight.Bold),
+//        Font(R.font.fira_sans_italic, FontWeight.Normal, FontStyle.Italic),
+//    )
 
     MaterialTheme(
         colors = colors,
