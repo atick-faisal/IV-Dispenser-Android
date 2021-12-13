@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 // debugMessage("WIFI AVAILABLE [$it]")
             }
         })
-        startMqttService()
+        // startMqttService()
     }
 
 //    override fun onStart() {

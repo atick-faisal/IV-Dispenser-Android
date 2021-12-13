@@ -6,7 +6,7 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
-rootProject.name = "Jetpack Compose Starter"
+rootProject.name = "IV Dispenser"
 include ':app'
 include ':core'
 include ':data'

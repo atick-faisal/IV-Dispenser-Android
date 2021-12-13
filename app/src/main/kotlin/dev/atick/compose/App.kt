@@ -27,7 +27,7 @@ class App : Application() {
             val notificationChannel = NotificationChannel(
                 MQTT_NOTIFICATION_CHANNEL_ID,
                 "I/V Dispenser Status Notification",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Always Monitor I/V Dispenser Statuses in the Background"
             }

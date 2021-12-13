@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="persistent_notification_title">Mqtt Service</string>
-    <string name="persistent_notification_description">Hello Hi</string>
+    <string name="persistent_notification_title">Connected to the I/V Dispenser Server</string>
+    <string name="persistent_notification_description">I/V dispensers are being monitored in the background</string>
+    <string name="persistent_notification_warning_title">Connection Lost</string>
+    <string name="persistent_notification_warning_description">Please check your WiFi connection</string>
 </resources>

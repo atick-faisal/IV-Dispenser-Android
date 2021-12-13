@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
@@ -29,17 +30,22 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MqttService : BaseService(), MqttRepository {
 
+    companion object {
+        const val MQTT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt"
+    }
+
     @Inject
     lateinit var dispenserDao: DispenserDao
 
+    private val persistentNotificationBuilder = NotificationCompat.Builder(
+        this, MQTT_NOTIFICATION_CHANNEL_ID
+    )
+
+    private var serviceStarted = false
     private lateinit var client: Mqtt3AsyncClient
     private val _isClientConnected = MutableLiveData<Event<Boolean>>()
     val isClientConnected: LiveData<Event<Boolean>>
         get() = _isClientConnected
-
-    companion object {
-        const val MQTT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt"
-    }
 
     inner class LocalBinder : Binder() {
         fun getService(): MqttService = this@MqttService
@@ -53,10 +59,44 @@ class MqttService : BaseService(), MqttRepository {
             onConnected = {
                 Logger.i("MQTT CLIENT CONNECTED!")
                 _isClientConnected.postValue(Event(true))
+                if (serviceStarted) {
+                    val notification = persistentNotificationBuilder
+                        .setSmallIcon(R.drawable.ic_connected)
+                        .setContentTitle(
+                            getString(
+                                R.string.persistent_notification_title
+                            )
+                        )
+                        .setContentText(
+                            getString(
+                                R.string.persistent_notification_description
+                            )
+                        )
+                        .build()
+                    with(NotificationManagerCompat.from(this)) {
+                        notify(PERSISTENT_NOTIFICATION_ID, notification)
+                    }
+                }
             },
             onDisconnected = {
                 Logger.i("MQTT CLIENT DISCONNECTED")
                 _isClientConnected.postValue(Event(false))
+                val notification = persistentNotificationBuilder
+                    .setSmallIcon(R.drawable.ic_warning)
+                    .setContentTitle(
+                        getString(
+                            R.string.persistent_notification_warning_title
+                        )
+                    )
+                    .setContentText(
+                        getString(
+                            R.string.persistent_notification_warning_description
+                        )
+                    )
+                    .build()
+                with(NotificationManagerCompat.from(this)) {
+                    notify(PERSISTENT_NOTIFICATION_ID, notification)
+                }
             }
         )
 
@@ -71,14 +111,14 @@ class MqttService : BaseService(), MqttRepository {
                 onMessage = {}
             )
         }
+        serviceStarted = true
     }
 
     override fun setupNotification(): Notification {
-        return NotificationCompat
-            .Builder(this, MQTT_NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_android)
-            .setContentTitle(getString(R.string.persistent_notification_title))
-            .setContentText(getString(R.string.persistent_notification_description))
+        return persistentNotificationBuilder
+            .setSmallIcon(R.drawable.ic_warning)
+            .setContentTitle(getString(R.string.persistent_notification_warning_title))
+            .setContentText(getString(R.string.persistent_notification_warning_description))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
     }
@@ -87,6 +127,7 @@ class MqttService : BaseService(), MqttRepository {
         this.disconnect {
             debugMessage("Disconnected")
         }
+        serviceStarted = false
     }
 
     override fun onBind(intent: Intent?): IBinder {

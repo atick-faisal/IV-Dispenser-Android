@@ -53,9 +53,8 @@ class HomeFragment : BaseComposeFragment() {
 
     override fun onStart() {
         super.onStart()
-        Intent(requireContext(), MqttService::class.java).also { intent ->
-            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
+        startMqttService()
+        bindMqttService()
     }
 
     override fun onStop() {
@@ -75,5 +74,16 @@ class HomeFragment : BaseComposeFragment() {
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToDashboardFragment(deviceId)
         )
+    }
+
+    private fun startMqttService() {
+        val intent = Intent(requireActivity(), MqttService::class.java)
+        requireContext().startService(intent)
+    }
+
+    private fun bindMqttService() {
+        Intent(requireContext(), MqttService::class.java).also { intent ->
+            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
     }
 }
