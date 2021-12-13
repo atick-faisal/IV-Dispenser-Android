@@ -3,6 +3,7 @@ package dev.atick.compose.ui.home.components
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.atick.compose.ui.common.components.TitleText
 
 @Composable
 fun TopBar(
@@ -33,12 +35,9 @@ fun TopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .height(64.dp)
         ) {
-            Text(
-                text = "I/V Dispensers",
-                fontSize = 20.sp
-            )
+            TitleText(title = "I/V Dispensers")
         }
     }
 }

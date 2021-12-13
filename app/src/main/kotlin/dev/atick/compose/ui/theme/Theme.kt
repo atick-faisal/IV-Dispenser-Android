@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.sp
 import dev.atick.compose.R
 
 private val DarkColorPalette = darkColors(
-    primary = MaterialColor.Green700,
-    primaryVariant = MaterialColor.Green600,
+    primary = Primary,
+    primaryVariant = PrimaryVariant,
     secondary = MaterialColor.Orange700,
     secondaryVariant = MaterialColor.Orange600,
     background = Color(0xFF_2E3440),
@@ -31,8 +31,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = MaterialColor.Green700,
-    primaryVariant = MaterialColor.Green600,
+    primary = Primary,
+    primaryVariant = PrimaryVariant,
     secondary = MaterialColor.Orange400,
     secondaryVariant = MaterialColor.Orange600,
     background = MaterialColor.BlueGray50,
@@ -40,8 +40,8 @@ private val LightColorPalette = lightColors(
     error = MaterialColor.Red400,
     onPrimary = MaterialColor.White,
     onSecondary = MaterialColor.White,
-    onBackground = MaterialColor.BlueGray900,
-    onSurface = MaterialColor.BlueGray900,
+    onBackground = MaterialColor.BlueGray800,
+    onSurface = MaterialColor.BlueGray800,
     onError = MaterialColor.White
 )
 
@@ -56,55 +56,8 @@ fun DispenserTheme(
         LightColorPalette
     }
 
-//    val fontFamily = FontFamily(
-//        Font(R.font.fira_sans_thin, FontWeight.Thin),
-//        Font(R.font.fira_sans_light, FontWeight.Light),
-//        Font(R.font.fira_sans_regular, FontWeight.Normal),
-//        Font(R.font.fira_sans_medium, FontWeight.Medium),
-//        Font(R.font.fira_sans_bold, FontWeight.Bold),
-//        Font(R.font.fira_sans_italic, FontWeight.Normal, FontStyle.Italic),
-//    )
-
     MaterialTheme(
         colors = colors,
-//        typography = Typography.copy(
-//            h1 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 48.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Medium
-//            ),
-//            h2 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 32.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Medium
-//            ),
-//            h3 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 24.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Medium
-//            ),
-//            h4 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 20.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Medium
-//            ),
-//            h5 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 16.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Normal
-//            ),
-//            h6 = TextStyle(
-//                color = Color.DarkGray,
-//                fontSize = 14.sp,
-//                fontFamily = fontFamily,
-//                fontWeight = FontWeight.Normal
-//            )
-//        ),
         shapes = Shapes,
         content = content,
     )

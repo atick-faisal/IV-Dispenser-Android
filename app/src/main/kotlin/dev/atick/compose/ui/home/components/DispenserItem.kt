@@ -1,10 +1,13 @@
 package dev.atick.compose.ui.home.components
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
@@ -45,42 +48,43 @@ fun DispenserItem(
                 fontSize = 12.sp
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                Modifier.fillMaxSize()
-            ) {
-                Column(
-                    Modifier.weight(0.5F)
+                Row(
+                    Modifier.fillMaxSize()
                 ) {
+                    Column(
+                        Modifier.weight(0.5F)
+                    ) {
 
 
-                    Text(text = "Room No.")
+                        Text(text = "Room No.")
 
-                    Text(
-                        text = dispenser.room.toString(),
-                        fontSize = 48.sp,
-                        fontWeight = FontWeight.Thin
-                    )
-                }
+                        Text(
+                            text = dispenser.room.toString(),
+                            color = MaterialTheme.colors.onSurface,
+                            fontSize = 48.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
 
-                Column(
-                    Modifier
-                        .weight(0.5F)
-                ) {
-                    SensorItem(
-                        icon = Icons.Filled.InvertColors,
-                        "${dispenser.dripRate?.round() ?: 0F} /min"
-                    )
+                    Column(
+                        Modifier
+                            .weight(0.5F)
+                    ) {
+                        SensorItem(
+                            icon = Icons.Filled.InvertColors,
+                            "${dispenser.dripRate?.round() ?: 0F} /min"
+                        )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    SensorItem(
-                        icon = Icons.Filled.Air,
-                        value = "${dispenser.flowRate.round()} mL/h"
-                    )
+                        SensorItem(
+                            icon = Icons.Filled.Air,
+                            value = "${dispenser.flowRate.round()} mL/h"
+                        )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                     SensorItem(
                         icon = Icons.Filled.Water,

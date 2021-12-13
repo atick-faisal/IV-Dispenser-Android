@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +39,7 @@ fun LoginScreen(
     return Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colors.surface)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -107,6 +106,6 @@ fun LoginScreen(
         ) {
             Text(text = stringResource(R.string.login))
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.fillMaxHeight(0.4F))
     }
 }
