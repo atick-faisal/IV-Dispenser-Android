@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
@@ -32,6 +33,9 @@ class DashboardFragment : BaseComposeFragment() {
         requireContext().debugMessage(deviceId.toString())
         deviceId?.let { id ->
             viewModel.fetchDispenserStates(id)
+            viewModel.dispenserStates.observe(this) {
+                Logger.i(it.toString())
+            }
         }
     }
 }

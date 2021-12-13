@@ -101,7 +101,6 @@ class MqttService : BaseService(), MqttRepository {
                 }
             }
         )
-
     }
 
     override fun onStartService() {

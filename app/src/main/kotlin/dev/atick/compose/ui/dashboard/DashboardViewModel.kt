@@ -16,7 +16,7 @@ import kotlin.math.min
 @HiltViewModel
 class DashboardViewModel @Inject constructor(private val dispenserDao: DispenserDao) : ViewModel() {
 
-    private lateinit var dispenserStates: LiveData<List<DispenserState>>
+    lateinit var dispenserStates: LiveData<List<DispenserState>>
     lateinit var lastState: LiveData<DispenserState>
     lateinit var urinePercentage: LiveData<Float>
     lateinit var urineOutDataset: LiveData<LineDataSet>
@@ -44,10 +44,10 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
             val entries = mutableListOf<Entry>()
             if (dispenserStates.isEmpty()) LineDataSet(entries, "Drip Rate")
             else {
-                dispenserStates.reversed().forEach { dispenserState ->
+                dispenserStates.reversed().forEachIndexed { _, dispenserState ->
                     entries.add(
                         Entry(
-                            dispenserState.timestamp.toFloat(),
+                            (dispenserState.timestamp % 1000000L).toFloat(),
                             dispenserState.dripRate ?: 0F
                         )
                     )
@@ -62,7 +62,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 flowRateDataset.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
-                            dispenserState.timestamp.toFloat(),
+                            (dispenserState.timestamp % 1000000L).toFloat(),
                             dispenserState.flowRate
                         )
                     )
@@ -77,7 +77,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
-                            dispenserState.timestamp.toFloat(),
+                            (dispenserState.timestamp % 1000000L).toFloat(),
                             dispenserState.urineOut
                         )
                     )

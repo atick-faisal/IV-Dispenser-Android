@@ -34,5 +34,13 @@ data class Dispenser(
 
     @ColumnInfo(name = "urine_out")
     @SerialName("urine_out")
-    val urineOut: Float
+    val urineOut: Float,
+
+    @ColumnInfo(name = "alert_message")
+    @SerialName("alert_message")
+    val alertMessage: String? = null,
+
+    @ColumnInfo(name = "visibility")
+    @SerialName("visibility")
+    var visibility: Boolean = true,
 )

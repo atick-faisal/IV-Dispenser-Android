@@ -56,7 +56,7 @@ fun LinePlot(
             }
         },
         update = { lineChart ->
-            lineChart.xAxis.labelCount = 4
+            lineChart.xAxis.labelCount = 3
             lineChart.axisLeft.textColor = if (isDarkThemeEnabled) {
                 Color.LTGRAY
             } else {
