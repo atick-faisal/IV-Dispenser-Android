@@ -21,6 +21,7 @@ class App : Application() {
         Logger.addLogAdapter(logAdapter)
         Logger.i("Skynet Initiated!")
         createPersistentNotificationChannel()
+        createAlertNotificationChannel()
     }
 
     private fun createPersistentNotificationChannel() {

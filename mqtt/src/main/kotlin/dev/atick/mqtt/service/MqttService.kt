@@ -34,6 +34,7 @@ class MqttService : BaseService(), MqttRepository {
     companion object {
         const val PERSISTENT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt.persistent"
         const val ALERT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt.alert"
+        const val ALERT_NOTIFICATION_ID = 1011
     }
 
     @Inject
@@ -62,7 +63,7 @@ class MqttService : BaseService(), MqttRepository {
             onConnected = {
                 Logger.i("MQTT CLIENT CONNECTED!")
                 _isClientConnected.postValue(Event(true))
-                if (serviceStarted) {
+                // if (serviceStarted) {
                     val notification = persistentNotificationBuilder
                         .setSmallIcon(R.drawable.ic_connected)
                         .setContentTitle(
@@ -79,7 +80,7 @@ class MqttService : BaseService(), MqttRepository {
                     with(NotificationManagerCompat.from(this)) {
                         notify(PERSISTENT_NOTIFICATION_ID, notification)
                     }
-                }
+                // }
             },
             onDisconnected = {
                 Logger.i("MQTT CLIENT DISCONNECTED")
@@ -125,11 +126,19 @@ class MqttService : BaseService(), MqttRepository {
             Logger.i("MAIN ACTIVITY NOT FOUND!")
             e.printStackTrace()
         }
-        val notification = persistentNotificationBuilder
-            .setSmallIcon(R.drawable.ic_warning)
-            .setContentTitle(getString(R.string.persistent_notification_warning_title))
-            .setContentText(getString(R.string.persistent_notification_warning_description))
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+        val notification = if (_isClientConnected.value?.peekContent() == true) {
+            persistentNotificationBuilder
+                .setSmallIcon(R.drawable.ic_connected)
+                .setContentTitle(getString(R.string.persistent_notification_title))
+                .setContentText(getString(R.string.persistent_notification_description))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+        } else {
+            persistentNotificationBuilder
+                .setSmallIcon(R.drawable.ic_warning)
+                .setContentTitle(getString(R.string.persistent_notification_warning_title))
+                .setContentText(getString(R.string.persistent_notification_warning_description))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+        }
 
         notificationIntent?.let {
             notification.apply {
@@ -242,6 +251,25 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     private fun handleAlert(message: String) {
+        val notification = NotificationCompat
+            .Builder(this, ALERT_NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_alert)
+            .setContentTitle(getString(R.string.iv_dispenser_alert))
+            .setContentText(message)
 
+        notificationIntent?.let {
+            notification.apply {
+                val pendingIntent = PendingIntent.getActivity(
+                    this@MqttService,
+                    101,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                setContentIntent(pendingIntent)
+            }
+        }
+        with(NotificationManagerCompat.from(this)) {
+            notify(ALERT_NOTIFICATION_ID, notification.build())
+        }
     }
 }
