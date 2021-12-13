@@ -9,7 +9,7 @@ fun getFormattedDateTime(timestamp: Long): String {
 }
 
 fun getFormattedDateTime(timestamp: Float): String {
-    val formatter = SimpleDateFormat("mm:ss", Locale.ENGLISH)
+    val formatter = SimpleDateFormat("h:mm:ss a", Locale.ENGLISH)
     val n = (System.currentTimeMillis() / 1000000L)
     return formatter.format(Date((n * 1000000L + timestamp.toLong())))
 }

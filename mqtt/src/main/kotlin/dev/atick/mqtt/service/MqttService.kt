@@ -32,14 +32,15 @@ import javax.inject.Inject
 class MqttService : BaseService(), MqttRepository {
 
     companion object {
-        const val MQTT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt"
+        const val PERSISTENT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt.persistent"
+        const val ALERT_NOTIFICATION_CHANNEL_ID = "dev.atick.mqtt.alert"
     }
 
     @Inject
     lateinit var dispenserDao: DispenserDao
 
     private val persistentNotificationBuilder = NotificationCompat.Builder(
-        this, MQTT_NOTIFICATION_CHANNEL_ID
+        this, PERSISTENT_NOTIFICATION_CHANNEL_ID
     )
 
     private var serviceStarted = false
@@ -229,6 +230,7 @@ class MqttService : BaseService(), MqttRepository {
             try {
                 val dispenser = Json.decodeFromString(Dispenser.serializer(), item)
                 val dispenserState = Json.decodeFromString(DispenserState.serializer(), item)
+                dispenserState.alertMessage?.let { handleAlert(it) }
                 CoroutineScope(Dispatchers.IO).launch {
                     dispenserDao.insert(dispenser)
                     dispenserDao.insert(dispenserState)
@@ -237,5 +239,9 @@ class MqttService : BaseService(), MqttRepository {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun handleAlert(message: String) {
+
     }
 }
