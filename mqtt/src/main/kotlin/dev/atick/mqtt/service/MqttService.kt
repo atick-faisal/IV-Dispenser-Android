@@ -1,6 +1,7 @@
 package dev.atick.mqtt.service
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
@@ -42,6 +43,7 @@ class MqttService : BaseService(), MqttRepository {
     )
 
     private var serviceStarted = false
+    private var notificationIntent: Intent? = null
     private lateinit var client: Mqtt3AsyncClient
     private val _isClientConnected = MutableLiveData<Event<Boolean>>()
     val isClientConnected: LiveData<Event<Boolean>>
@@ -115,12 +117,33 @@ class MqttService : BaseService(), MqttRepository {
     }
 
     override fun setupNotification(): Notification {
-        return persistentNotificationBuilder
+        try {
+            notificationIntent = Intent(
+                this, Class.forName("dev.atick.compose.MainActivity")
+            )
+        } catch (e: ClassNotFoundException) {
+            Logger.i("MAIN ACTIVITY NOT FOUND!")
+            e.printStackTrace()
+        }
+        val notification = persistentNotificationBuilder
             .setSmallIcon(R.drawable.ic_warning)
             .setContentTitle(getString(R.string.persistent_notification_warning_title))
             .setContentText(getString(R.string.persistent_notification_warning_description))
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .build()
+
+        notificationIntent?.let {
+            notification.apply {
+                val pendingIntent = PendingIntent.getActivity(
+                    this@MqttService,
+                    0,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                setContentIntent(pendingIntent)
+            }
+        }
+
+        return notification.build()
     }
 
     override fun collectGarbage() {

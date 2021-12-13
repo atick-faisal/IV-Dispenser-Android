@@ -39,7 +39,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation project(path: ':data')
+    implementation(project(":data"))
 
     // ... HiveMq
     api("com.hivemq:hivemq-mqtt-client:1.2.2")
