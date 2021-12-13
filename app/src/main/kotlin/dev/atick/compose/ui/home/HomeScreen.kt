@@ -11,8 +11,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.atick.compose.ui.common.components.TopBar
 import dev.atick.compose.ui.home.components.DispenserItem
-import dev.atick.compose.ui.home.components.TopBar
 
 @Composable
 fun HomeScreen(
@@ -27,7 +27,11 @@ fun HomeScreen(
             .background(MaterialTheme.colors.background)
     ) {
 
-        TopBar()
+        TopBar(
+            title = "I/V Dispensers",
+            onSearchClick = {},
+            onMenuClick = {}
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -35,6 +35,7 @@ import dev.atick.compose.ui.dashboard.components.Knob
 import dev.atick.compose.ui.dashboard.components.LinePlot
 import dev.atick.compose.ui.dashboard.components.TopBar
 import dev.atick.compose.ui.dashboard.components.WaterProgress
+import dev.atick.compose.utils.getFormattedDateTime
 import dev.atick.compose.utils.round
 
 @ExperimentalComposeUiApi
@@ -69,30 +70,30 @@ fun DashboardScreen(
             title = "Room No. ${dispenserState.value?.room ?: "101"}"
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Slider(
-            value = sliderValue.value,
-            onValueChange = {
-                sliderValue.value = it
-            },
-            Modifier.pointerInteropFilter { motionEvent ->
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_MOVE -> {
-                        sliderValue.value += 0.5F
-                        true
-                    }
-                    else -> false
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        Slider(
+//            value = sliderValue.value,
+//            onValueChange = {
+//                sliderValue.value = it
+//            },
+//            Modifier.pointerInteropFilter { motionEvent ->
+//                when (motionEvent.action) {
+//                    MotionEvent.ACTION_MOVE -> {
+//                        sliderValue.value += 0.5F
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        )
+//
+//        Spacer(modifier = Modifier.height(16.dp))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .verticalScroll(state = scrollState, enabled = true),
             horizontalAlignment = CenterHorizontally
         ) {
@@ -105,13 +106,14 @@ fun DashboardScreen(
 //                    .height(300.dp)
 //            )
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             // ----------------------------------- URINE OUT --------------------------------- //
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                elevation = if (isSystemInDarkTheme()) 0.dp else 2.dp,
+                elevation = 0.dp, //if (isSystemInDarkTheme()) 0.dp else 2.dp,
                 backgroundColor = MaterialTheme.colors.surface
             ) {
                 Column(
@@ -189,7 +191,7 @@ fun DashboardScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                elevation = if (isSystemInDarkTheme()) 0.dp else 2.dp,
+                elevation = 0.dp, //if (isSystemInDarkTheme()) 0.dp else 2.dp,
                 backgroundColor = MaterialTheme.colors.surface
             ) {
                 Column(
@@ -217,6 +219,17 @@ fun DashboardScreen(
                                 text = "${dispenserState.value?.dripRate?.round() ?: 60F} /min",
                                 fontSize = 32.sp,
                                 fontWeight = FontWeight.Light
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                text = "Last Updated: ${
+                                    getFormattedDateTime(
+                                        dispenserState.value?.timestamp ?: 0
+                                    )
+                                }",
+                                fontSize = 12.sp
                             )
                         }
 
