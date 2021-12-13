@@ -1,5 +1,6 @@
 package dev.atick.compose.ui.home.components
 
+import ai.atick.material.MaterialColor
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +37,12 @@ fun DispenserItem(
                 .clickable { onClick.invoke(dispenser.deviceId) },
         ),
         elevation = if (isSystemInDarkTheme()) 0.dp else 2.dp,
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = if (dispenser.alertMessage != null) {
+            MaterialTheme.colors.error
+        } else {
+            MaterialTheme.colors.surface
+        }
     ) {
         Column(
             Modifier
@@ -45,6 +51,7 @@ fun DispenserItem(
         ) {
             Text(
                 text = "Last Updated: ${getFormattedDateTime(dispenser.timestamp)}",
+                color = MaterialTheme.colors.onSurface,
                 fontSize = 12.sp
             )
 
@@ -58,7 +65,10 @@ fun DispenserItem(
                     ) {
 
 
-                        Text(text = "Room No.")
+                        Text(
+                            text = "Room No.",
+                            color = MaterialTheme.colors.onSurface
+                        )
 
                         Text(
                             text = dispenser.room.toString(),

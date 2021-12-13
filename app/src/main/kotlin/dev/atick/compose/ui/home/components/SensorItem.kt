@@ -25,9 +25,13 @@ fun SensorItem(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = ""
+            contentDescription = "",
+            tint = MaterialTheme.colors.onSurface,
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = value)
+        Text(
+            text = value,
+            color = MaterialTheme.colors.onSurface,
+        )
     }
 }
