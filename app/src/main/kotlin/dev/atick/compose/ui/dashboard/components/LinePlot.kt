@@ -1,15 +1,10 @@
 package dev.atick.compose.ui.dashboard.components
 
-import ai.atick.material.MaterialColor
 import android.graphics.Color
-import android.graphics.ColorFilter
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -17,6 +12,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.Utils
 import dev.atick.compose.R
 import dev.atick.compose.utils.getFormattedDateTime
 
@@ -31,6 +27,7 @@ fun LinePlot(
 
     AndroidView(
         factory = { ctx ->
+            Utils.init(ctx)
             LineChart(ctx).apply {
                 description.text = ""
                 axisLeft.setDrawLabels(false)

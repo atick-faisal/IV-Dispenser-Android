@@ -1,6 +1,5 @@
 package dev.atick.compose.ui.home
 
-import ai.atick.material.MaterialColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,6 +46,7 @@ fun HomeScreen(
                 DispenserItem(dispenser = it, onClick = { deviceId ->
                     onDispenserClick.invoke(deviceId)
                 })
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

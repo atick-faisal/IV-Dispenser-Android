@@ -29,7 +29,7 @@ class App : Application() {
             val notificationChannel = NotificationChannel(
                 PERSISTENT_NOTIFICATION_CHANNEL_ID,
                 "I/V Dispenser Status Notification",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "Always Monitor I/V Dispenser Statuses in the Background"
             }

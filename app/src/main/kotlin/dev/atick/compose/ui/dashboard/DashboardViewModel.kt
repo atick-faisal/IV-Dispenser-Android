@@ -3,11 +3,10 @@ package dev.atick.compose.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.atick.compose.utils.getFloatTimestamp
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
 import javax.inject.Inject
@@ -18,7 +17,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
 
     lateinit var dispenserStates: LiveData<List<DispenserState>>
     lateinit var lastState: LiveData<DispenserState>
-    lateinit var urinePercentage: LiveData<Float>
+    lateinit var urineLevel: LiveData<Float>
     lateinit var urineOutDataset: LiveData<LineDataSet>
     lateinit var flowRateDataset: LiveData<LineDataSet>
     lateinit var dripRateDataset: LiveData<LineDataSet>
@@ -36,7 +35,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 )
             } else it.first()
         }
-        urinePercentage = Transformations.map(dispenserStates) {
+        urineLevel = Transformations.map(dispenserStates) {
             if (it.isEmpty()) 0F
             else min(it.first().urineOut / 1000F, 1.0F)
         }
@@ -47,7 +46,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 dispenserStates.reversed().forEachIndexed { _, dispenserState ->
                     entries.add(
                         Entry(
-                            (dispenserState.timestamp % 1000000L).toFloat(),
+                            getFloatTimestamp(dispenserState.timestamp),
                             dispenserState.dripRate ?: 0F
                         )
                     )
@@ -62,7 +61,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 flowRateDataset.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
-                            (dispenserState.timestamp % 1000000L).toFloat(),
+                            getFloatTimestamp(dispenserState.timestamp),
                             dispenserState.flowRate
                         )
                     )
@@ -77,7 +76,7 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
-                            (dispenserState.timestamp % 1000000L).toFloat(),
+                            getFloatTimestamp(dispenserState.timestamp),
                             dispenserState.urineOut
                         )
                     )

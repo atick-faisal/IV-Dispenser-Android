@@ -6,7 +6,7 @@ import dev.atick.data.models.Dispenser
 import dev.atick.data.models.DispenserState
 
 @Database(
-    version = 5,
+    version = 6,
     exportSchema = false,
     entities = [
         Dispenser::class,
