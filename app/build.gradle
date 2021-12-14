@@ -78,7 +78,7 @@ dependencies {
     implementation project(path: ':mqtt')
 
     // ... Lottie
-    implementation("com.airbnb.android:lottie:3.4.0")
+    implementation("com.airbnb.android:lottie:4.2.2")
 
     // ... Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")

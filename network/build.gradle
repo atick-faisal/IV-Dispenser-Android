@@ -35,7 +35,7 @@ android {
 
 dependencies {
     def retrofit_version = "2.9.0"
-    def okhttp_version = "4.9.1"
+    def okhttp_version = "5.0.0-alpha.3"
 
     implementation(project(":core"))
 
