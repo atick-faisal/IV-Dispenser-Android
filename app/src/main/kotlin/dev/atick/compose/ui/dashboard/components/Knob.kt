@@ -23,11 +23,16 @@ fun Knob(
     modifier: Modifier = Modifier,
     limitingAngle: Float = 25f,
     percent: Float,
-    onValueChange: (Float) -> Unit
+    onValueChange: (Float) -> Unit,
+    onFinalValue: (Float) -> Unit
 ) {
     var rotation by remember {
         mutableStateOf(percent * (360F - 2 * limitingAngle) + limitingAngle)
     }
+    var newPercentage by remember {
+        mutableStateOf(0F)
+    }
+
     var touchX by remember {
         mutableStateOf(0f)
     }
@@ -67,11 +72,15 @@ fun Knob(
                             }
                             rotation = fixedAngle
 
-                            val newPercent =
+                            newPercentage =
                                 (fixedAngle - limitingAngle) / (360f - 2 * limitingAngle)
-                            onValueChange(newPercent)
+                            onValueChange(newPercentage)
                             true
                         } else false
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        onFinalValue(newPercentage)
+                        true
                     }
                     else -> false
                 }

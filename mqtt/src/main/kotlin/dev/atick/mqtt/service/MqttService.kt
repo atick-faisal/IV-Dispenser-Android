@@ -50,6 +50,9 @@ class MqttService : BaseService(), MqttRepository {
     private val _isClientConnected = MutableLiveData<Event<Boolean>>()
     val isClientConnected: LiveData<Event<Boolean>>
         get() = _isClientConnected
+    private val _publishingContent = MutableLiveData<Event<Boolean>>()
+    val publishingContent: LiveData<Event<Boolean>>
+        get() = _publishingContent
 
     inner class LocalBinder : Binder() {
         fun getService(): MqttService = this@MqttService
@@ -109,7 +112,7 @@ class MqttService : BaseService(), MqttRepository {
         Logger.i("STARTING MQTT SERVICE")
         connect(null) {
             subscribe(
-                topic = "dev.atick.mqtt/#",
+                topic = "dev.atick.mqtt/status/#",
                 onSubscribe = {},
                 onMessage = {}
             )
@@ -193,15 +196,17 @@ class MqttService : BaseService(), MqttRepository {
 
     override fun publish(topic: String, message: String) {
         Logger.i("PUBLISHING ... ")
+        _publishingContent.postValue(Event(true))
         client.publishOnce(
             topic = topic,
             message = message,
             onSuccess = {
                 Logger.i("MESSAGE SENT SUCCESSFULLY")
-                debugMessage("Message Sent Successfully")
+                _publishingContent.postValue(Event(false))
             },
             onFailure = {
                 debugMessage("Failed to Send Message")
+                _publishingContent.postValue(Event(false))
                 it.printStackTrace()
             }
         )

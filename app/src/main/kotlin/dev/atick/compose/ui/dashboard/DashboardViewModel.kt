@@ -1,12 +1,14 @@
 package dev.atick.compose.ui.dashboard
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.compose.utils.getFloatTimestamp
+import dev.atick.core.utils.Event
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
 import javax.inject.Inject
@@ -21,6 +23,14 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
     lateinit var urineOutDataset: LiveData<LineDataSet>
     lateinit var flowRateDataset: LiveData<LineDataSet>
     lateinit var dripRateDataset: LiveData<LineDataSet>
+
+    private val _flowRate = MutableLiveData<Event<Float>>()
+    val flowRate: LiveData<Event<Float>>
+        get() = _flowRate
+
+    private val _sendingCommand = MutableLiveData<Boolean>()
+    val sendingCommand: LiveData<Boolean>
+        get() = _sendingCommand
 
     fun fetchDispenserStates(deviceId: String) {
         dispenserStates = dispenserDao.getStatesByDeviceId(deviceId, 40)
@@ -84,5 +94,17 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
                 LineDataSet(entries, "Urine Out")
             }
         }
+    }
+
+    fun setFlowRate(percent: Float) {
+        _flowRate.value = Event(percent)
+    }
+
+    fun sendingCommand() {
+        _sendingCommand.value = true
+    }
+
+    fun commandSent() {
+        _sendingCommand.value = false
     }
 }

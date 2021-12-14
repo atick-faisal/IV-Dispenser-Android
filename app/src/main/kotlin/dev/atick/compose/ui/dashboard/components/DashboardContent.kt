@@ -52,6 +52,7 @@ fun DashboardContent(
                         setAnimation(R.raw.urine_level)
                         repeatCount = ValueAnimator.INFINITE
                         repeatMode = LottieDrawable.REVERSE
+                        enableMergePathsForKitKatAndAbove(true)
                         speed = 0.3F
                         playAnimation()
                     }
@@ -85,6 +86,7 @@ fun DashboardContent(
                     LottieAnimationView(ctx).apply {
                         setAnimation(R.raw.flow_rate)
                         repeatCount = ValueAnimator.INFINITE
+                        enableMergePathsForKitKatAndAbove(true)
                         speed = 0.2F
                         playAnimation()
                     }
@@ -110,6 +112,7 @@ fun DashboardContent(
                     LottieAnimationView(ctx).apply {
                         setAnimation(R.raw.droplet)
                         repeatCount = ValueAnimator.INFINITE
+                        enableMergePathsForKitKatAndAbove(true)
                         playAnimation()
                     }
                 },
