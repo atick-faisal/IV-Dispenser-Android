@@ -23,7 +23,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import dev.atick.compose.R
 import dev.atick.compose.ui.common.components.TopBar
 import dev.atick.compose.ui.dashboard.components.SensorCard
-import dev.atick.compose.utils.round
+import dev.atick.core.utils.extensions.round
 
 @ExperimentalComposeUiApi
 @Composable

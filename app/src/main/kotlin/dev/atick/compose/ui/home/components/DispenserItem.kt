@@ -1,8 +1,5 @@
 package dev.atick.compose.ui.home.components
 
-import ai.atick.material.MaterialColor
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -16,12 +13,11 @@ import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Water
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.atick.compose.utils.getFormattedDateTime
-import dev.atick.compose.utils.round
+import dev.atick.core.utils.extensions.round
 import dev.atick.data.models.Dispenser
 
 @Composable
