@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,8 +65,9 @@ fun DashboardScreen(
     return Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-
+            .background(
+                if (isBottomMenuOpen) Color.Black else MaterialTheme.colors.background
+            )
     ) {
         Column(Modifier.fillMaxSize()) {
             TopBar(
@@ -125,7 +127,7 @@ fun DashboardScreen(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = "${flowPercentage.round()} mL/h",
+                            text = "${(flowPercentage * 100F).round()} mL/h",
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Medium
                         )

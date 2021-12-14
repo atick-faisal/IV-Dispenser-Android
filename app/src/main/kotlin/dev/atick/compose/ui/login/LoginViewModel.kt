@@ -22,7 +22,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     fun login() {
         viewModelScope.launch {
             loginProgress.value = true
-            // delay(3000)
+            delay(3000)
             loginProgress.value = false
             _login.value = Event(true)
         }

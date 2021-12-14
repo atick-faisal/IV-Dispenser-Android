@@ -1,9 +1,6 @@
 package dev.atick.compose.ui.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +8,8 @@ import dev.atick.compose.utils.getFloatTimestamp
 import dev.atick.core.utils.Event
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -105,6 +104,9 @@ class DashboardViewModel @Inject constructor(private val dispenserDao: Dispenser
     }
 
     fun commandSent() {
-        _sendingCommand.value = false
+        viewModelScope.launch {
+            delay(3000)
+            _sendingCommand.value = false
+        }
     }
 }
