@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
 //    override fun onStart() {
 //        super.onStart()
-//        Intent(this, MqttService::class.java).also { intent ->
+//        Intent(this, MqttService::class.kotlin).also { intent ->
 //            bindService(intent, connection, Context.BIND_AUTO_CREATE)
 //        }
 //    }

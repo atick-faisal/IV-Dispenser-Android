@@ -76,6 +76,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':data')
     implementation project(path: ':mqtt')
+    implementation project(path: ':bluetooth')
 
     // ... Lottie
     implementation("com.airbnb.android:lottie:4.2.2")
