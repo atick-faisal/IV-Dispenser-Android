@@ -1,13 +1,14 @@
 package dev.atick.compose.ui.registration
 
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.atick.bluetooth.models.BluetoothDevice
 import dev.atick.bluetooth.repository.BluetoothRepository
-import dev.atick.core.utils.Event
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,14 @@ class RegistrationViewModel @Inject constructor(
     fun fetchPairedDevices() {
         viewModelScope.launch {
             _pairedDevices.value = bluetoothRepository.getPairedDevicesList()
+        }
+    }
+
+    private val socket: BluetoothSocket? = null
+
+    fun connect() {
+        viewModelScope.launch(Dispatchers.IO) {
+            socket?.connect()
         }
     }
 }
