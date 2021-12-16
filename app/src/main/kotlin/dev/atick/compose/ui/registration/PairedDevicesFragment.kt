@@ -23,7 +23,10 @@ class PairedDevicesFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            PairedDevicesScreen(::connectToBTDevice)
+            PairedDevicesScreen(
+                ::connectToBTDevice,
+                ::sendRegistrationInfo
+            )
         }
     }
 
@@ -59,8 +62,13 @@ class PairedDevicesFragment : BaseComposeFragment() {
             requireContext().debugMessage("Connecting")
             bluetoothRepository.connect(device) {
                 viewModel.onConnect(device.address)
-                bluetoothRepository.send("Hello!") {}
             }
+        }
+    }
+
+    private fun sendRegistrationInfo(info: String) {
+        bluetoothRepository.send(info) {
+            requireContext().debugMessage("Registering ... ")
         }
     }
 

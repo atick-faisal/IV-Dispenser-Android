@@ -1,7 +1,6 @@
 package dev.atick.compose.ui.registration
 
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,8 +27,6 @@ class RegistrationViewModel @Inject constructor(
     private val _connectedDeviceId = MutableLiveData<String?>()
     val connectedDeviceId: LiveData<String?>
         get() = _connectedDeviceId
-
-    private val socket: BluetoothSocket? = null
 
     fun onConnect(deviceId: String) {
         _connectedDeviceId.postValue(deviceId)

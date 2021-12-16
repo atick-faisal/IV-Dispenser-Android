@@ -21,7 +21,8 @@ fun BluetoothDevice(
     modifier: Modifier = Modifier,
     bluetoothDevice: BluetoothDevice,
     isDeviceConnected: Boolean,
-    onClick: (BluetoothDevice) -> Unit
+    onClick: (BluetoothDevice) -> Unit,
+    onSubmitClick: (String) -> Unit
 ) {
     return Card(
         modifier = modifier.then(
@@ -37,7 +38,7 @@ fun BluetoothDevice(
                 onClick = onClick
             )
             AnimatedVisibility(visible = isDeviceConnected) {
-                RegistrationForm(onSubmitClick = { _, _, _ -> })
+                RegistrationForm(onSubmitClick = onSubmitClick)
             }
         }
     }

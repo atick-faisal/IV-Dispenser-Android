@@ -13,12 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.atick.compose.ui.common.components.CustomTextFiled
 import dev.atick.compose.R
+import dev.atick.data.models.Register
+import kotlinx.serialization.json.Json
 
 @ExperimentalAnimationApi
 @Composable
 fun RegistrationForm(
     modifier: Modifier = Modifier,
-    onSubmitClick: (String, String, String) -> Unit
+    onSubmitClick: (String) -> Unit
 ) {
     var roomNumber by remember { mutableStateOf("") }
     var wifiSsid by remember { mutableStateOf("") }
@@ -61,11 +63,15 @@ fun RegistrationForm(
 
         Button(
             onClick = {
-                onSubmitClick(
-                    roomNumber,
-                    wifiSsid,
-                    wifiPassword
+                val data = Json.encodeToString(
+                    Register.serializer(),
+                    Register(
+                        roomNumber,
+                        wifiSsid,
+                        wifiPassword
+                    )
                 )
+                onSubmitClick(data)
             },
             modifier = Modifier
                 .fillMaxWidth()

@@ -19,6 +19,7 @@ import dev.atick.compose.ui.registration.components.BluetoothDevice
 @Composable
 fun PairedDevicesScreen(
     connectToBTDevice: (BluetoothDevice) -> Unit,
+    sendRegistrationInfo: (String) -> Unit,
     viewModel: RegistrationViewModel = viewModel()
 ) {
 
@@ -50,7 +51,8 @@ fun PairedDevicesScreen(
                 BluetoothDevice(
                     bluetoothDevice = it,
                     isDeviceConnected = it.address == connectedDeviceId.value,
-                    onClick = connectToBTDevice
+                    onClick = connectToBTDevice,
+                    onSubmitClick = sendRegistrationInfo
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
