@@ -1,6 +1,5 @@
 package dev.atick.compose.ui.registration
 
-import android.bluetooth.BluetoothDevice
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
@@ -23,10 +22,7 @@ class PairedDevicesFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            PairedDevicesScreen(
-                ::connectToBTDevice,
-                ::sendRegistrationInfo
-            )
+            PairedDevicesScreen()
         }
     }
 
@@ -52,30 +48,6 @@ class PairedDevicesFragment : BaseComposeFragment() {
 
     override fun onStop() {
         super.onStop()
-        cleanup()
-    }
-
-    private fun connectToBTDevice(device: BluetoothDevice) {
-        if (device.address == viewModel.connectedDeviceId.value) {
-            cleanup()
-        } else {
-            requireContext().debugMessage("Connecting")
-            bluetoothRepository.connect(device) {
-                viewModel.onConnect(device.address)
-            }
-        }
-    }
-
-    private fun sendRegistrationInfo(info: String) {
-        bluetoothRepository.send(info) {
-            requireContext().debugMessage("Registering ... ")
-        }
-    }
-
-    private fun cleanup() {
-        bluetoothRepository.close {
-            Logger.i("BLUETOOTH SOCKET CLOSED")
-            viewModel.onDisconnect()
-        }
+        viewModel.closeBluetoothConnection()
     }
 }

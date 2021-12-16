@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.compose.utils.getFloatTimestamp
+import dev.atick.core.ui.BaseViewModel
 import dev.atick.core.utils.Event
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
@@ -14,7 +15,9 @@ import javax.inject.Inject
 import kotlin.math.min
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor(private val dispenserDao: DispenserDao) : ViewModel() {
+class DashboardViewModel @Inject constructor(
+    private val dispenserDao: DispenserDao
+) : BaseViewModel() {
 
     lateinit var dispenserStates: LiveData<List<DispenserState>>
     lateinit var lastState: LiveData<DispenserState>

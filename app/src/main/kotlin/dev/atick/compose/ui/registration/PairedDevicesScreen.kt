@@ -1,6 +1,5 @@
 package dev.atick.compose.ui.registration
 
-import android.bluetooth.BluetoothDevice
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,8 +17,6 @@ import dev.atick.compose.ui.registration.components.BluetoothDevice
 @ExperimentalAnimationApi
 @Composable
 fun PairedDevicesScreen(
-    connectToBTDevice: (BluetoothDevice) -> Unit,
-    sendRegistrationInfo: (String) -> Unit,
     viewModel: RegistrationViewModel = viewModel()
 ) {
 
@@ -51,8 +48,12 @@ fun PairedDevicesScreen(
                 BluetoothDevice(
                     bluetoothDevice = it,
                     isDeviceConnected = it.address == connectedDeviceId.value,
-                    onClick = connectToBTDevice,
-                    onSubmitClick = sendRegistrationInfo
+                    onClick = { bluetoothDevice ->
+                        viewModel.connectToBTDevice(bluetoothDevice)
+                    },
+                    onSubmitClick = { registrationInfo ->
+                        viewModel.registerDevice(registrationInfo)
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
