@@ -1,36 +1,29 @@
 package dev.atick.compose.ui.dashboard
 
-import android.animation.ValueAnimator
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.airbnb.lottie.LottieAnimationView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import dev.atick.compose.R
 import dev.atick.compose.ui.common.components.BottomMenu
 import dev.atick.compose.ui.common.components.TopBar
+import dev.atick.compose.ui.dashboard.components.BottomMenuContent
 import dev.atick.compose.ui.dashboard.components.DashboardContent
-import dev.atick.compose.ui.dashboard.components.Knob
-import dev.atick.core.utils.extensions.round
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -98,65 +91,13 @@ fun DashboardScreen(
             exit = fadeOut()
         ) {
             BottomMenu {
-                Row(
-                    modifier = Modifier.padding(
-                        top = 32.dp,
-                        bottom = 64.dp,
-                        start = 32.dp,
-                        end = 32.dp
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Knob(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(120.dp),
-                        percent = flowPercentage,
-                        onValueChange = { flowPercentage = it },
-                        onFinalValue = { viewModel.setFlowRate(it) }
-                    )
-
-                    Spacer(modifier = Modifier.width(32.dp))
-
-                    Column(Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "Flow Rate",
-                            fontSize = 20.sp
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "${(flowPercentage * 100F).round()} mL/h",
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        AnimatedVisibility(sendingCommand.value) {
-                            Column {
-                                AndroidView(
-                                    factory = { ctx ->
-                                        LottieAnimationView(ctx).apply {
-                                            setAnimation(R.raw.loader)
-                                            repeatCount = ValueAnimator.INFINITE
-                                            enableMergePathsForKitKatAndAbove(true)
-                                            playAnimation()
-                                        }
-                                    },
-                                    modifier = Modifier
-                                        .height(32.dp)
-                                        .fillMaxWidth()
-                                ) 
-                                
-                                OutlinedButton(onClick = { viewModel.commandSent() }) {
-                                    Text(text = "Cancel")
-                                }
-                            }
-                        }
-                    }
-                }
+                BottomMenuContent(
+                    flowPercentage = flowPercentage,
+                    onValueChange = { flowPercentage = it },
+                    onFinalValueChange = { viewModel.setFlowRate(it) },
+                    isLoaderVisible = sendingCommand.value,
+                    onCancel = { viewModel.commandSent() }
+                )
             }
         }
     }
