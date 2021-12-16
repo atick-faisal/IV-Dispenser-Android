@@ -23,6 +23,7 @@ fun PairedDevicesScreen(
 ) {
 
     val pairedDevices = viewModel.pairedDevices.observeAsState()
+    val connectedDeviceId = viewModel.connectedDeviceId.observeAsState()
 
     return Column(
         modifier = Modifier
@@ -48,6 +49,7 @@ fun PairedDevicesScreen(
             items(pairedDevices.value ?: listOf()) {
                 BluetoothDevice(
                     bluetoothDevice = it,
+                    isDeviceConnected = it.address == connectedDeviceId.value,
                     onClick = connectToBTDevice
                 )
                 Spacer(modifier = Modifier.height(16.dp))

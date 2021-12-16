@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.bluetooth.repository.BluetoothRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,11 +25,17 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    private val _connectedDeviceId = MutableLiveData<String?>()
+    val connectedDeviceId: LiveData<String?>
+        get() = _connectedDeviceId
+
     private val socket: BluetoothSocket? = null
 
-    fun connect() {
-        viewModelScope.launch(Dispatchers.IO) {
-            socket?.connect()
-        }
+    fun onConnect(deviceId: String) {
+        _connectedDeviceId.postValue(deviceId)
+    }
+
+    fun onDisconnect() {
+        _connectedDeviceId.postValue(null)
     }
 }

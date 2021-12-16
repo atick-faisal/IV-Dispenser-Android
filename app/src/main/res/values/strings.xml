@@ -5,4 +5,9 @@
     <string name="label_password">Password</string>
     <string name="hint_password">Password</string>
     <string name="login">Login</string>
+    <string name="label_room">Room Number</string>
+    <string name="hint_room">e.g. 103</string>
+    <string name="label_wifi">WiFi Name</string>
+    <string name="hint_wifi">Name of the WiFi Network</string>
+    <string name="register_device">Register Device</string>
 </resources>

@@ -1,4 +1,4 @@
-package dev.atick.compose.ui.login.components
+package dev.atick.compose.ui.common.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 
 @ExperimentalAnimationApi
 @Composable
-fun LoginTextFiled(
+fun CustomTextFiled(
     modifier: Modifier = Modifier,
     textFieldValue: String,
     hintResourceId: Int,

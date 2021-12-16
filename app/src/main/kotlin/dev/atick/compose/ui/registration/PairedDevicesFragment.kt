@@ -47,16 +47,27 @@ class PairedDevicesFragment : BaseComposeFragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        cleanup()
+    }
+
     private fun connectToBTDevice(device: BluetoothDevice) {
-        bluetoothRepository.connect(device) {
-            bluetoothRepository.send("Hello!") {}
+        if (device.address == viewModel.connectedDeviceId.value) {
+            cleanup()
+        } else {
+            requireContext().debugMessage("Connecting")
+            bluetoothRepository.connect(device) {
+                viewModel.onConnect(device.address)
+                bluetoothRepository.send("Hello!") {}
+            }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    private fun cleanup() {
         bluetoothRepository.close {
             Logger.i("BLUETOOTH SOCKET CLOSED")
+            viewModel.onDisconnect()
         }
     }
 }
