@@ -10,6 +10,9 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,39 +40,49 @@ fun BluetoothDevice(
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                imageVector = bluetoothDevice.getDeviceIcon(),
-                contentDescription = "Device type",
-                modifier = Modifier
-                    .width(32.dp)
-                    .height(32.dp),
-                tint = if (bluetoothDevice.bluetoothClass.majorDeviceClass == COMPUTER) {
-                    MaterialTheme.colors.primary
-                } else MaterialTheme.colors.onSurface
-            )
-
-            Spacer(modifier = Modifier.width(24.dp))
-
-            Column {
-                Text(
-                    text = bluetoothDevice.name,
-                    color = MaterialTheme.colors.onSurface,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Medium
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = bluetoothDevice.getDeviceIcon(),
+                    contentDescription = "Device type",
+                    modifier = Modifier
+                        .width(32.dp)
+                        .height(32.dp),
+                    tint = if (bluetoothDevice.bluetoothClass.majorDeviceClass == COMPUTER) {
+                        MaterialTheme.colors.primary
+                    } else MaterialTheme.colors.onSurface
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.width(24.dp))
 
-                Text(
-                    text = bluetoothDevice.address,
-                    color = MaterialTheme.colors.onSurface,
-                    fontSize = 16.sp,
-                )
+                Column {
+                    Text(
+                        text = bluetoothDevice.name,
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = bluetoothDevice.address,
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = 16.sp,
+                    )
+                }
             }
+
+            Icon(
+                imageVector = if (
+                    bluetoothDevice.bluetoothClass.majorDeviceClass == COMPUTER
+                ) {
+                    Icons.Default.NavigateNext
+                } else Icons.Default.Error,
+                contentDescription = "Connect"
+            )
         }
-
-
     }
 }
