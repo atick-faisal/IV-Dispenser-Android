@@ -32,6 +32,7 @@ class PairedDevicesFragment : BaseComposeFragment() {
             Logger.i(it.toString())
         }
         viewModel.incomingMessage.observe(this) {
+            viewModel.handleIncomingMessage(it)
             requireContext().debugMessage(it)
         }
     }

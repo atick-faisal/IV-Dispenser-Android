@@ -128,7 +128,7 @@ class BluetoothRepositoryImpl @Inject constructor(
                         }
                         val data = String(
                             mmBuffer
-                                .slice(0 until numBytes)
+                                .slice(0 until numBytes - 1)
                                 .toByteArray()
                         )
                         _incomingMessage.postValue(data)

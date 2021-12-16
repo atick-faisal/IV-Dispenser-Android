@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ fun DeviceInfo(
     modifier: Modifier = Modifier,
     bluetoothDevice: BluetoothDevice,
     isDeviceConnected: Boolean,
+    isRegistrationComplete: Boolean,
     onClick: (BluetoothDevice) -> Unit
 ) {
     Row(
@@ -42,8 +44,9 @@ fun DeviceInfo(
                     .width(32.dp)
                     .height(32.dp),
                 tint = if (
-                    bluetoothDevice.bluetoothClass.majorDeviceClass ==  COMPUTER) {
-                    MaterialTheme.colors.primary
+                    bluetoothDevice.bluetoothClass.majorDeviceClass == COMPUTER) {
+                    if (isRegistrationComplete) MaterialTheme.colors.onPrimary
+                    else MaterialTheme.colors.primary
                 } else MaterialTheme.colors.onSurface
             )
 
@@ -52,7 +55,8 @@ fun DeviceInfo(
             Column {
                 Text(
                     text = bluetoothDevice.name,
-                    color = MaterialTheme.colors.onSurface,
+                    color = if (isRegistrationComplete) MaterialTheme.colors.onPrimary
+                    else MaterialTheme.colors.onSurface,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -61,7 +65,8 @@ fun DeviceInfo(
 
                 Text(
                     text = bluetoothDevice.address,
-                    color = MaterialTheme.colors.onSurface,
+                    color = if (isRegistrationComplete) MaterialTheme.colors.onPrimary
+                    else MaterialTheme.colors.onSurface,
                     fontSize = 16.sp,
                 )
             }
@@ -71,14 +76,21 @@ fun DeviceInfo(
             imageVector = if (
                 bluetoothDevice.bluetoothClass.majorDeviceClass == COMPUTER
             ) {
-                if (isDeviceConnected) {
-                    Icons.Default.ArrowDropDown
-                } else {
-                    Icons.Default.NavigateNext
+                when {
+                    isRegistrationComplete -> {
+                        Icons.Default.Done
+                    }
+                    isDeviceConnected -> {
+                        Icons.Default.ArrowDropDown
+                    }
+                    else -> {
+                        Icons.Default.NavigateNext
+                    }
                 }
-
             } else Icons.Default.Error,
-            contentDescription = "Connect"
+            contentDescription = "Connect",
+            tint = if (isRegistrationComplete) MaterialTheme.colors.onPrimary
+            else MaterialTheme.colors.onSurface
         )
     }
 }

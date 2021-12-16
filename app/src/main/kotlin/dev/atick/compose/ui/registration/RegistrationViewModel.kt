@@ -8,7 +8,10 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.bluetooth.repository.BluetoothRepository
 import dev.atick.core.ui.BaseViewModel
+import dev.atick.data.models.Response
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +27,10 @@ class RegistrationViewModel @Inject constructor(
     private val _connectedDeviceId = MutableLiveData<String?>()
     val connectedDeviceId: LiveData<String?>
         get() = _connectedDeviceId
+
+    private val _isRegistrationComplete = MutableLiveData<Boolean>()
+    val isRegistrationComplete: LiveData<Boolean>
+        get() = _isRegistrationComplete
 
     fun fetchPairedDevices() {
         viewModelScope.launch {
@@ -56,6 +63,18 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    fun handleIncomingMessage(message: String) {
+        try {
+            val response = Json.decodeFromString(
+                Response.serializer(),
+                message
+            )
+            _isRegistrationComplete.postValue(response.success)
+        } catch (e: SerializationException) {
+            Logger.i("PARSING FAILED")
+        }
+    }
+
     private fun onConnect(deviceId: String) {
         _connectedDeviceId.postValue(deviceId)
         loader.postValue(null)
@@ -63,5 +82,6 @@ class RegistrationViewModel @Inject constructor(
 
     private fun onDisconnect() {
         _connectedDeviceId.postValue(null)
+        _isRegistrationComplete.postValue(false)
     }
 }
