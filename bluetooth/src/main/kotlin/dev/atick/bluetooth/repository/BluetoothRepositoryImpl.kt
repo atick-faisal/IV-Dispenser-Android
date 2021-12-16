@@ -7,11 +7,14 @@ import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
@@ -22,6 +25,10 @@ class BluetoothRepositoryImpl @Inject constructor(
     companion object {
         private val BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     }
+
+    private val _incomingMessage = MutableLiveData<String>()
+    override val incomingMessage: LiveData<String>
+        get() = _incomingMessage
 
     private var mmSocket: BluetoothSocket? = null
     private val mmBuffer: ByteArray = ByteArray(1024)
@@ -65,7 +72,8 @@ class BluetoothRepositoryImpl @Inject constructor(
                 mmSocket?.close()
                 mmSocket =
                     bluetoothDevice.createInsecureRfcommSocketToServiceRecord(BT_UUID)
-            } catch (e: IOException) {}
+            } catch (e: IOException) {
+            }
         }
         CoroutineScope(Dispatchers.IO).launch {
             kotlin.runCatching {
@@ -73,6 +81,7 @@ class BluetoothRepositoryImpl @Inject constructor(
             }.onSuccess {
                 Logger.i("BLUETOOTH DEVICE CONNECTED")
                 onConnect.invoke()
+                handleBluetoothClient()
             }.onFailure { throwable ->
                 Logger.i("CONNECTION FAILED")
                 throwable.printStackTrace()
@@ -100,6 +109,32 @@ class BluetoothRepositoryImpl @Inject constructor(
             } catch (e: IOException) {
                 Logger.i("COULDN'T CLOSE SOCKET")
                 e.printStackTrace()
+            }
+        }
+    }
+
+    private fun handleBluetoothClient() {
+        mmSocket?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                kotlin.runCatching {
+                    val mmInStream: InputStream = it.inputStream
+                    var numBytes: Int
+                    while (true) {
+                        numBytes = try {
+                            mmInStream.read(mmBuffer)
+                        } catch (e: IOException) {
+                            Logger.i("SOCKET CLOSED")
+                            break
+                        }
+                        val data = String(
+                            mmBuffer
+                                .slice(0 until numBytes)
+                                .toByteArray()
+                        )
+                        _incomingMessage.postValue(data)
+                        Logger.i(data)
+                    }
+                }
             }
         }
     }

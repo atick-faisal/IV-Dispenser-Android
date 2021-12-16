@@ -15,6 +15,8 @@ import javax.inject.Inject
 class RegistrationViewModel @Inject constructor(
     private val bluetoothRepository: BluetoothRepository
 ) : BaseViewModel() {
+    val incomingMessage = bluetoothRepository.incomingMessage
+
     private val _pairedDevices = MutableLiveData<List<BluetoothDevice>>()
     val pairedDevices: LiveData<List<BluetoothDevice>>
         get() = _pairedDevices

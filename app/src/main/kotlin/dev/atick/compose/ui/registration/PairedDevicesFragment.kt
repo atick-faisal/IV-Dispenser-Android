@@ -31,6 +31,9 @@ class PairedDevicesFragment : BaseComposeFragment() {
         viewModel.pairedDevices.observe(this) {
             Logger.i(it.toString())
         }
+        viewModel.incomingMessage.observe(this) {
+            requireContext().debugMessage(it)
+        }
     }
 
     override fun onStart() {
