@@ -1,5 +1,7 @@
 package dev.atick.compose.ui.registration
 
+import android.app.Activity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
@@ -19,6 +21,16 @@ class RegistrationFragment : BaseComposeFragment() {
     @Inject
     lateinit var bluetoothRepository: BluetoothRepository
     private val viewModel: RegistrationViewModel by viewModels()
+
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                viewModel.fetchPairedDevices()
+            }
+        }
+    }
 
     @Composable
     override fun ComposeUi() {
@@ -44,10 +56,7 @@ class RegistrationFragment : BaseComposeFragment() {
             requireActivity().debugMessage("Bluetooth is on")
             viewModel.fetchPairedDevices()
         } else {
-            bluetoothRepository.enableBluetooth(requireActivity()) {
-                Logger.i("BLUETOOTH ENABLED")
-                viewModel.fetchPairedDevices()
-            }
+            bluetoothRepository.enableBluetooth(resultLauncher)
         }
     }
 

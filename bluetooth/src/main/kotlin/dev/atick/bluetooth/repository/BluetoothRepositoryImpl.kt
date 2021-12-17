@@ -1,12 +1,10 @@
 package dev.atick.bluetooth.repository
 
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.orhanobut.logger.Logger
@@ -37,15 +35,7 @@ class BluetoothRepositoryImpl @Inject constructor(
         return bluetoothAdapter?.isEnabled ?: false
     }
 
-    override fun enableBluetooth(activity: ComponentActivity, onActivityResult: () -> Unit) {
-        val resultLauncher = activity
-            .registerForActivityResult(StartActivityForResult()) { result ->
-                when (result.resultCode) {
-                    Activity.RESULT_OK -> {
-                        onActivityResult.invoke()
-                    }
-                }
-            }
+    override fun enableBluetooth(resultLauncher: ActivityResultLauncher<Intent>) {
         bluetoothAdapter?.let {
             if (!it.isEnabled) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)

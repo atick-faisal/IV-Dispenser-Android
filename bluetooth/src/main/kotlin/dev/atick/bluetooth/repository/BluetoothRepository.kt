@@ -1,13 +1,14 @@
 package dev.atick.bluetooth.repository
 
 import android.bluetooth.BluetoothDevice
-import androidx.activity.ComponentActivity
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 
 interface BluetoothRepository {
     val incomingMessage: LiveData<String>
     fun isBluetoothAvailable(): Boolean
-    fun enableBluetooth(activity: ComponentActivity, onActivityResult: () -> Unit)
+    fun enableBluetooth(resultLauncher: ActivityResultLauncher<Intent>)
     fun getPairedDevicesList(): List<BluetoothDevice>
     fun connect(bluetoothDevice: BluetoothDevice, onConnect: () -> Unit)
     fun send(message: String, onSuccess: () -> Unit)

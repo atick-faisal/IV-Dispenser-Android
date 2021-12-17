@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
 import dev.atick.core.utils.extensions.observeEvent
 
@@ -14,7 +15,9 @@ class SplashFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeUi() {
-        SplashScreen()
+        DispenserTheme {
+            SplashScreen()
+        }
     }
 
     override fun observeStates() {

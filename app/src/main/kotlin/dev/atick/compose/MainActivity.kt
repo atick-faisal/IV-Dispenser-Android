@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_JetpackComposeStarter)
         setContentView(R.layout.activity_main)
         networkUtils = NetworkUtils(this)
         networkUtils.isInternetAvailable.observe(this@MainActivity, {

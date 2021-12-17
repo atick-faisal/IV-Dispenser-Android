@@ -8,6 +8,7 @@ import dev.atick.core.ui.BaseViewModel
 import dev.atick.core.utils.Event
 import dev.atick.data.database.datastore.AppSettings
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ class SplashViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            delay(3000)
             withContext(Dispatchers.IO) {
                 appSettings.loginCredentials.collect {
                     _loginStatus.postValue(
