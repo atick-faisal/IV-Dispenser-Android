@@ -4,12 +4,13 @@ import android.bluetooth.BluetoothClass.Device.Major.*
 import android.bluetooth.BluetoothDevice
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.ViewInAr
 import androidx.compose.ui.graphics.vector.ImageVector
 
 fun BluetoothDevice.getDeviceIcon(): ImageVector {
     return when (this.bluetoothClass.majorDeviceClass) {
         AUDIO_VIDEO -> Icons.Default.BluetoothAudio
-        // COMPUTER -> Icons.Default.Computer // For ESP32
+//        COMPUTER -> Icons.Default.Computer
         HEALTH -> Icons.Default.DirectionsRun
         IMAGING -> Icons.Default.Image
         NETWORKING -> Icons.Default.Cloud
@@ -18,6 +19,6 @@ fun BluetoothDevice.getDeviceIcon(): ImageVector {
         TOY -> Icons.Default.Toys
         UNCATEGORIZED -> Icons.Default.Bluetooth
         WEARABLE -> Icons.Default.Watch
-        else -> Icons.Default.HealthAndSafety // For ESP32
+        else -> Icons.Outlined.ViewInAr
     }
 }

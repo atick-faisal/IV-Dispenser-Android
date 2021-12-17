@@ -66,14 +66,11 @@ class HomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            HomeScreen(::navigateToDashboardFragment)
+            HomeScreen(
+                ::navigateToDashboardFragment,
+                ::navigateToRegisterFragment
+            )
         }
-    }
-
-    private fun navigateToDashboardFragment(deviceId: String) {
-        findNavController().navigate(
-            HomeFragmentDirections.actionHomeFragmentToDashboardFragment(deviceId)
-        )
     }
 
     private fun startMqttService() {
@@ -85,5 +82,17 @@ class HomeFragment : BaseComposeFragment() {
         Intent(requireContext(), MqttService::class.java).also { intent ->
             activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
+    }
+
+    private fun navigateToDashboardFragment(deviceId: String) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToDashboardFragment(deviceId)
+        )
+    }
+
+    private fun navigateToRegisterFragment() {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToRegistrationFragment()
+        )
     }
 }
