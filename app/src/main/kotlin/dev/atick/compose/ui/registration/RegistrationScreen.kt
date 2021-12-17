@@ -17,6 +17,7 @@ import dev.atick.compose.ui.registration.components.BluetoothDevice
 @ExperimentalAnimationApi
 @Composable
 fun RegistrationScreen(
+    onExitClick: () -> Unit,
     viewModel: RegistrationViewModel = viewModel()
 ) {
 
@@ -32,7 +33,7 @@ fun RegistrationScreen(
         TopBar(
             title = "Dispenser Registration",
             onRefreshClick = { viewModel.fetchPairedDevices() },
-            onExitClick = {  }
+            onExitClick = onExitClick
         )
 
         Spacer(modifier = Modifier.height(16.dp))

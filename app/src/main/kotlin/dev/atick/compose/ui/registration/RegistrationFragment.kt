@@ -3,6 +3,7 @@ package dev.atick.compose.ui.registration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.bluetooth.repository.BluetoothRepository
@@ -22,7 +23,7 @@ class RegistrationFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            RegistrationScreen()
+            RegistrationScreen(::navigateToHomeFragment)
         }
     }
 
@@ -53,5 +54,11 @@ class RegistrationFragment : BaseComposeFragment() {
     override fun onStop() {
         super.onStop()
         viewModel.closeBluetoothConnection()
+    }
+
+    private fun navigateToHomeFragment() {
+        findNavController().navigate(
+            RegistrationFragmentDirections.actionRegistrationFragmentToHomeFragment()
+        )
     }
 }

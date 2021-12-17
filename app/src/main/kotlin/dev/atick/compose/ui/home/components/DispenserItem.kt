@@ -34,11 +34,9 @@ fun DispenserItem(
         ),
         elevation = if (isSystemInDarkTheme()) 0.dp else 2.dp,
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = if (dispenser.alertMessage != null) {
-            MaterialTheme.colors.error
-        } else {
-            MaterialTheme.colors.surface
-        }
+        backgroundColor =
+        if (dispenser.alertMessage != null) MaterialTheme.colors.error
+        else MaterialTheme.colors.surface
     ) {
         Column(
             Modifier
@@ -47,54 +45,63 @@ fun DispenserItem(
         ) {
             Text(
                 text = "Last Updated: ${getFormattedDateTime(dispenser.timestamp)}",
-                color = MaterialTheme.colors.onSurface,
+                color =
+                if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                else MaterialTheme.colors.onSurface,
                 fontSize = 12.sp
             )
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    Modifier.fillMaxSize()
+            Row(
+                Modifier.fillMaxSize()
+            ) {
+                Column(
+                    Modifier.weight(0.5F)
                 ) {
-                    Column(
-                        Modifier.weight(0.5F)
-                    ) {
 
 
-                        Text(
-                            text = "Room No.",
-                            color = MaterialTheme.colors.onSurface
-                        )
+                    Text(
+                        text = "Room No.",
+                        color =
+                        if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                        else MaterialTheme.colors.onSurface
+                    )
 
-                        Text(
-                            text = dispenser.room.toString(),
-                            color = MaterialTheme.colors.onSurface,
-                            fontSize = 48.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                    Text(
+                        text = dispenser.room.toString(),
+                        color =
+                        if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                        else MaterialTheme.colors.onSurface,
+                        fontSize = 48.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
 
-                    Column(
-                        Modifier
-                            .weight(0.5F)
-                    ) {
-                        SensorItem(
-                            icon = Icons.Filled.InvertColors,
-                            "${dispenser.dripRate?.round() ?: 0F} /min"
-                        )
+                Column(
+                    Modifier
+                        .weight(0.5F)
+                ) {
+                    SensorItem(
+                        icon = Icons.Filled.InvertColors,
+                        value = "${dispenser.dripRate?.round() ?: 0F} /min",
+                        alert = dispenser.alertMessage != null
+                    )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                        SensorItem(
-                            icon = Icons.Filled.Air,
-                            value = "${dispenser.flowRate.round()} mL/h"
-                        )
+                    SensorItem(
+                        icon = Icons.Filled.Air,
+                        value = "${dispenser.flowRate.round()} mL/h",
+                        alert = dispenser.alertMessage != null
+                    )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     SensorItem(
                         icon = Icons.Filled.Water,
-                        value = "${dispenser.urineOut.round()} mL"
+                        value = "${dispenser.urineOut.round()} mL",
+                        alert = dispenser.alertMessage != null
                     )
                 }
             }

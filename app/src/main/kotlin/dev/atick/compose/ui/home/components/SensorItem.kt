@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 fun SensorItem(
     icon: ImageVector,
     value: String,
+    alert: Boolean,
     modifier: Modifier = Modifier
 ) {
     return Row(
@@ -26,12 +27,14 @@ fun SensorItem(
         Icon(
             imageVector = icon,
             contentDescription = "",
-            tint = MaterialTheme.colors.onSurface,
+            tint = if (alert) MaterialTheme.colors.onError
+            else MaterialTheme.colors.onSurface
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = value,
-            color = MaterialTheme.colors.onSurface,
+            color = if (alert) MaterialTheme.colors.onError
+            else MaterialTheme.colors.onSurface
         )
     }
 }
