@@ -16,7 +16,7 @@ import dev.atick.compose.ui.registration.components.BluetoothDevice
 
 @ExperimentalAnimationApi
 @Composable
-fun PairedDevicesScreen(
+fun RegistrationScreen(
     viewModel: RegistrationViewModel = viewModel()
 ) {
 
@@ -30,9 +30,9 @@ fun PairedDevicesScreen(
             .background(MaterialTheme.colors.background)
     ) {
         TopBar(
-            title = "Paired Devices",
-            onSearchClick = {},
-            onMenuClick = {}
+            title = "Dispenser Registration",
+            onRefreshClick = { viewModel.fetchPairedDevices() },
+            onExitClick = {  }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

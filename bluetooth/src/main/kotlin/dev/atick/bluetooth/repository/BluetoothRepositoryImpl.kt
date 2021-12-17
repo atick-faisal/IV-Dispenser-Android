@@ -64,51 +64,59 @@ class BluetoothRepositoryImpl @Inject constructor(
     }
 
     override fun connect(bluetoothDevice: BluetoothDevice, onConnect: () -> Unit) {
-        if (mmSocket == null) {
-            mmSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(BT_UUID)
-            bluetoothAdapter?.cancelDiscovery()
-        } else {
-            try {
-                mmSocket?.close()
-                mmSocket =
-                    bluetoothDevice.createInsecureRfcommSocketToServiceRecord(BT_UUID)
-            } catch (e: IOException) {
-            }
-        }
+        bluetoothAdapter?.cancelDiscovery()
         CoroutineScope(Dispatchers.IO).launch {
             kotlin.runCatching {
+                mmSocket = if (mmSocket == null) {
+                    bluetoothDevice.createInsecureRfcommSocketToServiceRecord(BT_UUID)
+                } else {
+                    mmSocket?.close()
+                    bluetoothDevice.createInsecureRfcommSocketToServiceRecord(BT_UUID)
+                }
                 mmSocket?.connect()
             }.onSuccess {
                 Logger.i("BLUETOOTH DEVICE CONNECTED")
                 onConnect.invoke()
                 handleBluetoothClient()
             }.onFailure { throwable ->
-                Logger.i("CONNECTION FAILED")
-                throwable.printStackTrace()
+                when (throwable) {
+                    is IOException -> Logger.i("CONNECTION FAILED")
+                    else -> throwable.printStackTrace()
+                }
             }
         }
     }
 
     override fun send(message: String, onSuccess: () -> Unit) {
         mmSocket?.let { socket ->
-            try {
-                socket.outputStream.write(message.toByteArray())
-                onSuccess.invoke()
-            } catch (e: IOException) {
-                Logger.i("SENDING FAILED")
-                e.printStackTrace()
+            CoroutineScope(Dispatchers.IO).launch {
+                kotlin.runCatching {
+                    socket.outputStream.write(message.toByteArray())
+                }.onSuccess {
+                    onSuccess.invoke()
+                }.onFailure { throwable ->
+                    when (throwable) {
+                        is IOException -> Logger.i("SENDING FAILED")
+                        else -> throwable.printStackTrace()
+                    }
+                }
             }
         }
     }
 
     override fun close(onSuccess: () -> Unit) {
         mmSocket?.let { socket ->
-            try {
-                socket.close()
-                onSuccess.invoke()
-            } catch (e: IOException) {
-                Logger.i("COULDN'T CLOSE SOCKET")
-                e.printStackTrace()
+            CoroutineScope(Dispatchers.IO).launch {
+                kotlin.runCatching {
+                    socket.close()
+                }.onSuccess {
+                    onSuccess.invoke()
+                }.onFailure { throwable ->
+                    when (throwable) {
+                        is IOException -> Logger.i("COULDN'T CLOSE SOCKET")
+                        else -> throwable.printStackTrace()
+                    }
+                }
             }
         }
     }
@@ -120,12 +128,7 @@ class BluetoothRepositoryImpl @Inject constructor(
                     val mmInStream: InputStream = it.inputStream
                     var numBytes: Int
                     while (true) {
-                        numBytes = try {
-                            mmInStream.read(mmBuffer)
-                        } catch (e: IOException) {
-                            Logger.i("SOCKET CLOSED")
-                            break
-                        }
+                        numBytes = mmInStream.read(mmBuffer)
                         val data = String(
                             mmBuffer
                                 .slice(0 until numBytes - 1)
@@ -133,6 +136,11 @@ class BluetoothRepositoryImpl @Inject constructor(
                         )
                         _incomingMessage.postValue(data)
                         Logger.i(data)
+                    }
+                }.onFailure { throwable ->
+                    when (throwable) {
+                        is IOException -> Logger.i("SOCKET CLOSED")
+                        else -> throwable.printStackTrace()
                     }
                 }
             }

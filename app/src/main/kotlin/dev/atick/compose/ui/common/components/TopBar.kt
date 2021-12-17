@@ -11,7 +11,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +25,9 @@ fun TopBar(
     modifier: Modifier = Modifier,
     title: String,
     onSearchClick: (() -> Unit)? = null,
-    onMenuClick: (() -> Unit)? = null
+    onRefreshClick: (() -> Unit)? = null,
+    onMenuClick: (() -> Unit)? = null,
+    onExitClick: (() -> Unit)? = null
 ) {
     return Card(
         modifier = modifier
@@ -56,11 +60,29 @@ fun TopBar(
                     }
                 }
 
+                onRefreshClick?.let { onRefreshClick ->
+                    IconButton(onClick = onRefreshClick) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
+
                 onMenuClick?.let { onMenuClick ->
                     IconButton(onClick = onMenuClick) {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "Menu"
+                        )
+                    }
+                }
+
+                onExitClick?.let { onExitClick ->
+                    IconButton(onClick = onExitClick) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Exit"
                         )
                     }
                 }

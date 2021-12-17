@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @ExperimentalAnimationApi
 @AndroidEntryPoint
-class PairedDevicesFragment : BaseComposeFragment() {
+class RegistrationFragment : BaseComposeFragment() {
 
     @Inject
     lateinit var bluetoothRepository: BluetoothRepository
@@ -22,7 +22,7 @@ class PairedDevicesFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
-            PairedDevicesScreen()
+            RegistrationScreen()
         }
     }
 
