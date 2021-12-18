@@ -43,17 +43,17 @@ class DashboardFragment : BaseComposeFragment() {
             mqttRepository = mqttService
             mBound = true
 
-            mqttRepository.connect(null) {
-                mqttRepository.subscribe(
-                    topic = "dev.atick.mqtt/#",
-                    onSubscribe = {},
-                    onMessage = {
-                        it?.let {
-
-                        }
-                    }
-                )
-            }
+//            mqttRepository.connect(null) {
+//                mqttRepository.subscribe(
+//                    topic = "dev.atick.mqtt/#",
+//                    onSubscribe = {},
+//                    onMessage = {
+//                        it?.let {
+//
+//                        }
+//                    }
+//                )
+//            }
 
             this@DashboardFragment.observeEvent(mqttService.isClientConnected) {
                 context?.debugMessage("Client Connected [$it]")

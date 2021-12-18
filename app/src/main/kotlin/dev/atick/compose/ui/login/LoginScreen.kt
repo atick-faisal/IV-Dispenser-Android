@@ -15,8 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,16 +29,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.LottieAnimationView
 import dev.atick.compose.R
 import dev.atick.compose.ui.login.components.LoginTextFiled
+import dev.atick.data.models.Login
 
 @ExperimentalAnimationApi
 @Composable
 fun LoginScreen(
+    onLoginClick: (Login) -> Unit,
     viewModel: LoginViewModel = viewModel()
 ) {
-
-    val username = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-
     return Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -79,19 +75,19 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             LoginTextFiled(
-                textFieldValue = username.value,
+                textFieldValue = viewModel.username.value,
                 labelResourceId = R.string.label_username,
                 hintResourceId = R.string.hint_username,
                 leadingIcon = {
                     Icon(imageVector = Icons.Filled.Person, contentDescription = "")
                 },
                 onValueChange = {
-                    username.value = it
+                    viewModel.username.value = it
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
             LoginTextFiled(
-                textFieldValue = password.value,
+                textFieldValue = viewModel.password.value,
                 isPasswordField = true,
                 labelResourceId = R.string.label_password,
                 hintResourceId = R.string.hint_password,
@@ -99,12 +95,19 @@ fun LoginScreen(
                     Icon(imageVector = Icons.Filled.Password, contentDescription = "")
                 },
                 onValueChange = {
-                    password.value = it
+                    viewModel.password.value = it
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                onClick = { viewModel.login() },
+                onClick = {
+                    onLoginClick(
+                        Login(
+                            username = viewModel.username.value,
+                            password = viewModel.password.value
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -126,7 +129,7 @@ fun LoginScreen(
                 painter = painterResource(id = R.drawable.qu_logo),
                 contentDescription = "Qatar University Logo"
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(

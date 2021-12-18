@@ -67,22 +67,22 @@ class MqttService : BaseService(), MqttRepository {
                 Logger.i("MQTT CLIENT CONNECTED!")
                 _isClientConnected.postValue(Event(true))
                 // if (serviceStarted) {
-                    val notification = persistentNotificationBuilder
-                        .setSmallIcon(R.drawable.ic_connected)
-                        .setContentTitle(
-                            getString(
-                                R.string.persistent_notification_title
-                            )
+                val notification = persistentNotificationBuilder
+                    .setSmallIcon(R.drawable.ic_connected)
+                    .setContentTitle(
+                        getString(
+                            R.string.persistent_notification_title
                         )
-                        .setContentText(
-                            getString(
-                                R.string.persistent_notification_description
-                            )
+                    )
+                    .setContentText(
+                        getString(
+                            R.string.persistent_notification_description
                         )
-                        .build()
-                    with(NotificationManagerCompat.from(this)) {
-                        notify(PERSISTENT_NOTIFICATION_ID, notification)
-                    }
+                    )
+                    .build()
+                with(NotificationManagerCompat.from(this)) {
+                    notify(PERSISTENT_NOTIFICATION_ID, notification)
+                }
                 // }
             },
             onDisconnected = {
@@ -108,9 +108,11 @@ class MqttService : BaseService(), MqttRepository {
         )
     }
 
-    override fun onStartService() {
+    override fun onStartService(intent: Intent?) {
         Logger.i("STARTING MQTT SERVICE")
-        connect(null) {
+        val username = intent?.getStringExtra("username")
+        val password = intent?.getStringExtra("password")
+        connect(username, password) {
             subscribe(
                 topic = "dev.atick.mqtt/status/#",
                 onSubscribe = {},
@@ -169,10 +171,12 @@ class MqttService : BaseService(), MqttRepository {
         return binder
     }
 
-    override fun connect(broker: String?, onConnect: () -> Unit) {
+    override fun connect(username: String?, password: String?, onConnect: () -> Unit) {
         if (_isClientConnected.value?.peekContent() != true) {
             Logger.i("CONNECTING ... ")
             client.simpleConnect(
+                username = username,
+                password = password,
                 onSuccess = { returnCode ->
                     Logger.i("RETURN CODE: [$returnCode]")
                     onConnect.invoke()

@@ -3,29 +3,39 @@ package dev.atick.compose.ui.login
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.core.ui.BaseViewModel
-import dev.atick.core.utils.Event
-import dev.atick.data.database.room.DispenserDao
-import kotlinx.coroutines.delay
+import dev.atick.data.database.datastore.AppSettings
+import dev.atick.data.models.Login
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : BaseViewModel() {
+class LoginViewModel @Inject constructor(
+    private val appSettings: AppSettings
+) : BaseViewModel() {
     val loginProgress = mutableStateOf(false)
-    private val _login = MutableLiveData<Event<Boolean>>()
-    val login: LiveData<Event<Boolean>>
-        get() = _login
+    val username = mutableStateOf("")
+    val password = mutableStateOf("")
 
-    fun login() {
+    fun saveLoginCredentials() {
         viewModelScope.launch {
-            loginProgress.value = true
-            delay(3000)
-            loginProgress.value = false
-            _login.value = Event(true)
+            appSettings.saveLoginCredentials(
+                Login(
+                    username = username.value,
+                    password = password.value,
+                    loginStatus = true
+                )
+            )
         }
+    }
+
+    fun startLoginProcess() {
+        loginProgress.value = true
+    }
+
+    fun endLoginProcess() {
+        loginProgress.value = false
     }
 }

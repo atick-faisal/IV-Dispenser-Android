@@ -1,5 +1,6 @@
 package dev.atick.compose.ui.splash
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -7,6 +8,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
 import dev.atick.core.utils.extensions.observeEvent
+import dev.atick.data.models.Login
+import dev.atick.mqtt.service.MqttService
 
 @AndroidEntryPoint
 class SplashFragment : BaseComposeFragment() {
@@ -22,10 +25,20 @@ class SplashFragment : BaseComposeFragment() {
 
     override fun observeStates() {
         super.observeStates()
-        observeEvent(viewModel.loginStatus) { userLoggedIn ->
-            if (userLoggedIn) navigateToHomeFragment()
+        observeEvent(viewModel.login) { login ->
+            if (login.loginStatus) {
+                startMqttService(login)
+                navigateToHomeFragment()
+            }
             else navigateToLoginFragment()
         }
+    }
+
+    private fun startMqttService(login: Login) {
+        val intent = Intent(requireActivity(), MqttService::class.java)
+        intent.putExtra("username", login.username)
+        intent.putExtra("password", login.password)
+        requireContext().startService(intent)
     }
 
     private fun navigateToLoginFragment() {

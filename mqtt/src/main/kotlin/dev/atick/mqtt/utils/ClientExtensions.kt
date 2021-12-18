@@ -6,6 +6,8 @@ import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAckReturnCo
 import com.orhanobut.logger.Logger
 
 inline fun Mqtt3AsyncClient.simpleConnect(
+    username: String? = null,
+    password: String? = null,
     crossinline onSuccess: (Boolean) -> Unit,
     noinline onFailure: ((Mqtt3ConnAckReturnCode) -> Unit)?
 ) {
@@ -13,8 +15,8 @@ inline fun Mqtt3AsyncClient.simpleConnect(
         .cleanSession(false)
         .keepAlive(60)
         .simpleAuth()
-        .username("admin")
-        .password("admin".encodeToByteArray())
+        .username(username ?: "")
+        .password((password ?: "").encodeToByteArray())
         .applySimpleAuth()
         .send()
         .thenAccept { connAck ->

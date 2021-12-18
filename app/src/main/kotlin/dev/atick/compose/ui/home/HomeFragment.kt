@@ -29,17 +29,17 @@ class HomeFragment : BaseComposeFragment() {
             mqttRepository = mqttService
             mBound = true
 
-            mqttRepository.connect(null) {
-                mqttRepository.subscribe(
-                    topic = "dev.atick.mqtt/#",
-                    onSubscribe = {},
-                    onMessage = {
-                        it?.let {
-
-                        }
-                    }
-                )
-            }
+//            mqttRepository.connect(null) {
+//                mqttRepository.subscribe(
+//                    topic = "dev.atick.mqtt/#",
+//                    onSubscribe = {},
+//                    onMessage = {
+//                        it?.let {
+//
+//                        }
+//                    }
+//                )
+//            }
 
             this@HomeFragment.observeEvent(mqttService.isClientConnected) {
                 context?.debugMessage("Client Connected [$it]")
@@ -53,7 +53,7 @@ class HomeFragment : BaseComposeFragment() {
 
     override fun onStart() {
         super.onStart()
-        startMqttService()
+        // startMqttService()
         bindMqttService()
     }
 
@@ -73,10 +73,10 @@ class HomeFragment : BaseComposeFragment() {
         }
     }
 
-    private fun startMqttService() {
-        val intent = Intent(requireActivity(), MqttService::class.java)
-        requireContext().startService(intent)
-    }
+//    private fun startMqttService() {
+//        val intent = Intent(requireActivity(), MqttService::class.java)
+//        requireContext().startService(intent)
+//    }
 
     private fun bindMqttService() {
         Intent(requireContext(), MqttService::class.java).also { intent ->

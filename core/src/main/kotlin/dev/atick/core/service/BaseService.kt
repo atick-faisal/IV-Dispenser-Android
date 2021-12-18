@@ -13,7 +13,7 @@ abstract class BaseService : Service() {
     private lateinit var persistentNotification: Notification
 
     open fun onCreateService() {}
-    abstract fun onStartService()
+    abstract fun onStartService(intent: Intent?)
     abstract fun setupNotification(): Notification
     abstract fun collectGarbage()
 
@@ -23,7 +23,7 @@ abstract class BaseService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        onStartService()
+        onStartService(intent)
         persistentNotification = setupNotification()
         startForeground(PERSISTENT_NOTIFICATION_ID, persistentNotification)
         return START_STICKY
