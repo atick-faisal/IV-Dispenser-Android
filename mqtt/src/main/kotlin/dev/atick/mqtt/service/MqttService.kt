@@ -248,7 +248,9 @@ class MqttService : BaseService(), MqttRepository {
             try {
                 val dispenser = Json.decodeFromString(Dispenser.serializer(), item)
                 val dispenserState = Json.decodeFromString(DispenserState.serializer(), item)
-                dispenser.alertMessage?.let { handleAlert(it) }
+                if (!dispenserState.alertMessage.isNullOrEmpty()) {
+                    dispenser.alertMessage?.let { handleAlert(it) }
+                }
                 CoroutineScope(Dispatchers.IO).launch {
                     dispenserDao.insert(dispenser)
                     dispenserDao.insert(dispenserState)
