@@ -35,7 +35,7 @@ fun DispenserItem(
         elevation = if (isSystemInDarkTheme()) 0.dp else 2.dp,
         shape = RoundedCornerShape(16.dp),
         backgroundColor =
-        if (dispenser.alertMessage != null) MaterialTheme.colors.error
+        if (!dispenser.alertMessage.isNullOrEmpty()) MaterialTheme.colors.error
         else MaterialTheme.colors.surface
     ) {
         Column(
@@ -46,7 +46,7 @@ fun DispenserItem(
             Text(
                 text = "Last Updated: ${getFormattedDateTime(dispenser.timestamp)}",
                 color =
-                if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                if (!dispenser.alertMessage.isNullOrEmpty()) MaterialTheme.colors.onError
                 else MaterialTheme.colors.onSurface,
                 fontSize = 12.sp
             )
@@ -64,14 +64,14 @@ fun DispenserItem(
                     Text(
                         text = "Room No.",
                         color =
-                        if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                        if (!dispenser.alertMessage.isNullOrEmpty()) MaterialTheme.colors.onError
                         else MaterialTheme.colors.onSurface
                     )
 
                     Text(
                         text = dispenser.room.toString(),
                         color =
-                        if (dispenser.alertMessage != null) MaterialTheme.colors.onError
+                        if (!dispenser.alertMessage.isNullOrEmpty()) MaterialTheme.colors.onError
                         else MaterialTheme.colors.onSurface,
                         fontSize = 48.sp,
                         fontWeight = FontWeight.Medium
@@ -85,7 +85,7 @@ fun DispenserItem(
                     SensorItem(
                         icon = Icons.Filled.InvertColors,
                         value = "${dispenser.dripRate?.round() ?: 0F} /min",
-                        alert = dispenser.alertMessage != null
+                        alert = !dispenser.alertMessage.isNullOrEmpty()
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -93,7 +93,7 @@ fun DispenserItem(
                     SensorItem(
                         icon = Icons.Filled.Air,
                         value = "${dispenser.flowRate.round()} mL/h",
-                        alert = dispenser.alertMessage != null
+                        alert = !dispenser.alertMessage.isNullOrEmpty()
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -101,7 +101,7 @@ fun DispenserItem(
                     SensorItem(
                         icon = Icons.Filled.Water,
                         value = "${dispenser.urineOut.round()} mL",
-                        alert = dispenser.alertMessage != null
+                        alert = !dispenser.alertMessage.isNullOrEmpty()
                     )
                 }
             }
