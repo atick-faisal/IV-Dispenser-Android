@@ -25,10 +25,6 @@ class MqttRepositoryImpl @Inject constructor(
     override val isClientConnected: LiveData<Event<Boolean>>
         get() = _isClientConnected
 
-    private val _publishingContent = MutableLiveData<Event<Boolean>>()
-    override val publishingContent: LiveData<Event<Boolean>>
-        get() = _publishingContent
-
     override fun initializeClient(onConnected: () -> Unit, onDisconnected: () -> Unit) {
         client = setUpDefaultMqtt3Client(
             onConnected = {
@@ -71,19 +67,17 @@ class MqttRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun publish(topic: String, message: String) {
+    override fun publish(topic: String, message: String, onSuccess: () -> Unit) {
         Logger.i("PUBLISHING ... ")
-        _publishingContent.postValue(Event(true))
         client.publishOnce(
             topic = topic,
             message = message,
             onSuccess = {
                 Logger.i("MESSAGE SENT SUCCESSFULLY")
-                _publishingContent.postValue(Event(false))
+                onSuccess.invoke()
             },
             onFailure = {
                 Logger.e("FAILED TO PUBLISH!")
-                _publishingContent.postValue(Event(false))
                 it.printStackTrace()
             }
         )

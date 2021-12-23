@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -29,17 +29,15 @@ import dev.atick.compose.ui.dashboard.components.DashboardContent
 fun DashboardScreen(
     viewModel: DashboardViewModel = viewModel()
 ) {
-
-
     var flowPercentage by remember { mutableStateOf(0.5F) }
-    var isBottomMenuOpen by remember { mutableStateOf(false) }
+    var isBottomMenuOpen by rememberSaveable { mutableStateOf(false) }
 
     val dispenserState by viewModel.lastState.collectAsState()
     val urineLevel by viewModel.urineLevel.collectAsState()
     val dripRateDataset by viewModel.dripRateDataset.collectAsState()
     val flowRateDataset by viewModel.flowRateDataset.collectAsState()
     val urineOutDataset by viewModel.urineOutDataset.collectAsState()
-    val sendingCommand by viewModel.sendingCommand.observeAsState(false)
+    val sendingCommand by viewModel.sendingCommand
 
     return Box(
         modifier = Modifier

@@ -22,9 +22,6 @@ class DashboardFragment : BaseComposeFragment() {
     @Inject
     lateinit var mqttRepository: MqttRepository
 
-    private val viewModel: DashboardViewModel by viewModels()
-    private var deviceId: String? = null
-
     @Composable
     override fun ComposeUi() {
         DispenserTheme {
@@ -34,33 +31,9 @@ class DashboardFragment : BaseComposeFragment() {
 
     override fun observeStates() {
         super.observeStates()
-        observeEvent(viewModel.flowRate) {
-            sendCommand(it)
-        }
+
         observeEvent(mqttRepository.isClientConnected) {
             context?.debugMessage("Client Connected [$it]")
-        }
-
-        observeEvent(mqttRepository.publishingContent) {
-            if (it) viewModel.sendingCommand() else viewModel.commandSent()
-        }
-    }
-
-    private fun sendCommand(flowRate: Float) {
-        if (mqttRepository.isClientConnected.value?.peekContent() == true) {
-            deviceId?.let { deviceId ->
-                viewModel.sendingCommand()
-                mqttRepository.publish(
-                    topic = "dev.atick.mqtt/command/${deviceId}",
-                    message = Json.encodeToString(
-                        Command.serializer(),
-                        Command(
-                            deviceId = deviceId,
-                            flowRate = flowRate
-                        )
-                    )
-                )
-            }
         }
     }
 }

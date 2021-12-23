@@ -1,6 +1,6 @@
 package dev.atick.compose.ui.dashboard
 
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -9,21 +9,24 @@ import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.compose.utils.getFloatTimestamp
 import dev.atick.core.ui.BaseViewModel
-import dev.atick.core.utils.Event
 import dev.atick.core.utils.extensions.stateInDelayed
 import dev.atick.data.database.room.DispenserDao
+import dev.atick.data.models.Command
 import dev.atick.data.models.DispenserState
+import dev.atick.mqtt.repository.MqttRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.math.min
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val dispenserDao: DispenserDao
+    private val dispenserDao: DispenserDao,
+    private val mqttRepository: MqttRepository
 ) : BaseViewModel() {
 
     private var deviceId: String? = null
@@ -34,13 +37,8 @@ class DashboardViewModel @Inject constructor(
     lateinit var flowRateDataset: StateFlow<LineDataSet>
     lateinit var dripRateDataset: StateFlow<LineDataSet>
 
-    private val _flowRate = MutableLiveData<Event<Float>>()
-    val flowRate: LiveData<Event<Float>>
-        get() = _flowRate
-
     private val _sendingCommand = MutableLiveData<Boolean>()
-    val sendingCommand: LiveData<Boolean>
-        get() = _sendingCommand
+    val sendingCommand = mutableStateOf(false)
 
     private val emptyDispenserState = DispenserState(
         deviceId = " --- ",
@@ -127,16 +125,31 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun setFlowRate(percent: Float) {
-        _flowRate.value = Event(percent)
+        if (mqttRepository.isClientConnected.value?.peekContent() == true) {
+            deviceId?.let { deviceId ->
+                sendingCommand()
+                mqttRepository.publish(
+                    topic = "dev.atick.mqtt/command/${deviceId}",
+                    message = Json.encodeToString(
+                        Command.serializer(),
+                        Command(
+                            deviceId = deviceId,
+                            flowRate = percent
+                        )
+                    ),
+                    onSuccess = { commandSent() }
+                )
+            }
+        }
     }
 
-    fun sendingCommand() {
+    private fun sendingCommand() {
         _sendingCommand.value = true
     }
 
     fun commandSent() {
         viewModelScope.launch {
-            delay(3000)
+            delay(3_000L)
             _sendingCommand.value = false
         }
     }

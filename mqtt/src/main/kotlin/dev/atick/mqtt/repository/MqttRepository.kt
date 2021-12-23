@@ -5,7 +5,6 @@ import dev.atick.core.utils.Event
 
 interface MqttRepository {
     val isClientConnected: LiveData<Event<Boolean>>
-    val publishingContent: LiveData<Event<Boolean>>
 
     fun initializeClient(
         onConnected: () -> Unit,
@@ -24,7 +23,8 @@ interface MqttRepository {
 
     fun publish(
         topic: String,
-        message: String
+        message: String,
+        onSuccess: () -> Unit
     )
 
     fun subscribe(
