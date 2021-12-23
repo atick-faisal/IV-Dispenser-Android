@@ -8,7 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,7 @@ fun HomeScreen(
     onAddDispenserClick: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val dispensers = viewModel.dispensers.observeAsState()
+    val dispensers by viewModel.dispensers.collectAsState()
 
     return Box(
         Modifier
@@ -48,7 +49,7 @@ fun HomeScreen(
                         end = 16.dp
                     )
             ) {
-                items(dispensers.value ?: listOf()) {
+                items(dispensers) {
                     DispenserItem(dispenser = it, onClick = { deviceId ->
                         onDispenserClick.invoke(deviceId)
                     })

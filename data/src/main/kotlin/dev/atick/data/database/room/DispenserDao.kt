@@ -5,6 +5,7 @@ import androidx.room.*
 import dev.atick.data.models.Dispenser
 import dev.atick.data.models.DispenserState
 import dev.atick.data.models.relations.DispenserWithStates
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DispenserDao {
@@ -39,7 +40,7 @@ interface DispenserDao {
     suspend fun getDispenserStateById(id: Long): DispenserState?
 
     @Query("SELECT * FROM dispenser_table ORDER BY room ASC")
-    fun getAllDispensers(): LiveData<List<Dispenser>>
+    fun getAllDispensers(): Flow<List<Dispenser>>
 
     @Query("SELECT * FROM dispenser_state_table ORDER BY id DESC")
     fun getAllStates(): LiveData<List<DispenserState>>
