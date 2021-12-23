@@ -1,16 +1,21 @@
 package dev.atick.compose.ui.dashboard
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.compose.utils.getFloatTimestamp
 import dev.atick.core.ui.BaseViewModel
 import dev.atick.core.utils.Event
+import dev.atick.core.utils.extensions.stateInDelayed
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
@@ -20,6 +25,8 @@ class DashboardViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val dispenserDao: DispenserDao
 ) : BaseViewModel() {
+
+    private var deviceId: String? = null
 
     lateinit var lastState: StateFlow<DispenserState>
     lateinit var urineLevel: StateFlow<Float>
@@ -44,7 +51,8 @@ class DashboardViewModel @Inject constructor(
     )
 
     init {
-        savedStateHandle.get<String>("device_id")?.let {
+        deviceId = savedStateHandle.get<String>("device_id")
+        deviceId?.let {
             fetchDispenserStates(it)
         }
     }
@@ -55,19 +63,17 @@ class DashboardViewModel @Inject constructor(
             lastState = dispenserStates.map {
                 if (it.isEmpty()) emptyDispenserState
                 else it.first()
-            }.stateIn(
+            }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = emptyDispenserState,
-                started = SharingStarted.WhileSubscribed(5000)
+                initialValue = emptyDispenserState
             )
 
             urineLevel = dispenserStates.map {
                 if (it.isEmpty()) 0F
                 else min(it.first().urineOut / 1000F, 1.0F)
-            }.stateIn(
+            }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = 0F,
-                started = SharingStarted.WhileSubscribed(5000)
+                initialValue = 0F
             )
 
             dripRateDataset = dispenserStates.map { dispenserStates ->
@@ -81,10 +87,9 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Drip Rate")
-            }.stateIn(
+            }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Drip Rate"),
-                started = SharingStarted.WhileSubscribed(5000)
+                initialValue = LineDataSet(listOf(), "Drip Rate")
             )
 
             flowRateDataset = dispenserStates.map { dispenserStates ->
@@ -98,10 +103,9 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Flow Rate")
-            }.stateIn(
+            }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Flow Rate"),
-                started = SharingStarted.WhileSubscribed(5000)
+                initialValue = LineDataSet(listOf(), "Flow Rate")
             )
 
             urineOutDataset = dispenserStates.map { dispenserStates ->
@@ -115,10 +119,9 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Urine Out")
-            }.stateIn(
+            }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Urine Out"),
-                started = SharingStarted.WhileSubscribed(5000)
+                initialValue = LineDataSet(listOf(), "Urine Out")
             )
         }
     }
