@@ -10,21 +10,22 @@ import dev.atick.core.utils.Event
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.data.models.DispenserState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val dispenserDao: DispenserDao
 ) : BaseViewModel() {
 
-    lateinit var dispenserStates: LiveData<List<DispenserState>>
-    lateinit var lastState: LiveData<DispenserState>
-    lateinit var urineLevel: LiveData<Float>
-    lateinit var urineOutDataset: LiveData<LineDataSet>
-    lateinit var flowRateDataset: LiveData<LineDataSet>
-    lateinit var dripRateDataset: LiveData<LineDataSet>
+    lateinit var lastState: StateFlow<DispenserState>
+    lateinit var urineLevel: StateFlow<Float>
+    lateinit var urineOutDataset: StateFlow<LineDataSet>
+    lateinit var flowRateDataset: StateFlow<LineDataSet>
+    lateinit var dripRateDataset: StateFlow<LineDataSet>
 
     private val _flowRate = MutableLiveData<Event<Float>>()
     val flowRate: LiveData<Event<Float>>
@@ -34,27 +35,43 @@ class DashboardViewModel @Inject constructor(
     val sendingCommand: LiveData<Boolean>
         get() = _sendingCommand
 
-    fun fetchDispenserStates(deviceId: String) {
-        dispenserStates = dispenserDao.getStatesByDeviceId(deviceId, 40)
-        lastState = Transformations.map(dispenserStates) {
-            if (it.isEmpty()) {
-                DispenserState(
-                    deviceId = " --- ",
-                    room = "101",
-                    dripRate = 0F,
-                    flowRate = 0F,
-                    urineOut = 0F
-                )
-            } else it.first()
+    private val emptyDispenserState = DispenserState(
+        deviceId = " --- ",
+        room = "101",
+        dripRate = 0F,
+        flowRate = 0F,
+        urineOut = 0F
+    )
+
+    init {
+        savedStateHandle.get<String>("device_id")?.let {
+            fetchDispenserStates(it)
         }
-        urineLevel = Transformations.map(dispenserStates) {
-            if (it.isEmpty()) 0F
-            else min(it.first().urineOut / 1000F, 1.0F)
-        }
-        dripRateDataset = Transformations.map(dispenserStates) { dispenserStates ->
-            val entries = mutableListOf<Entry>()
-            if (dispenserStates.isEmpty()) LineDataSet(entries, "Drip Rate")
-            else {
+    }
+
+    private fun fetchDispenserStates(deviceId: String) {
+        val dispenserStates = dispenserDao.getStatesByDeviceId(deviceId, 40)
+        viewModelScope.launch {
+            lastState = dispenserStates.map {
+                if (it.isEmpty()) emptyDispenserState
+                else it.first()
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = emptyDispenserState,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+            urineLevel = dispenserStates.map {
+                if (it.isEmpty()) 0F
+                else min(it.first().urineOut / 1000F, 1.0F)
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = 0F,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+            dripRateDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
                 dispenserStates.reversed().forEachIndexed { _, dispenserState ->
                     entries.add(
                         Entry(
@@ -64,13 +81,15 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Drip Rate")
-            }
-        }
-        flowRateDataset = Transformations.map(dispenserStates) { flowRateDataset ->
-            val entries = mutableListOf<Entry>()
-            if (flowRateDataset.isEmpty()) LineDataSet(entries, "Flow Rate")
-            else {
-                flowRateDataset.reversed().forEach { dispenserState ->
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Drip Rate"),
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+            flowRateDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
+                dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
                             getFloatTimestamp(dispenserState.timestamp),
@@ -79,12 +98,14 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Flow Rate")
-            }
-        }
-        urineOutDataset = Transformations.map(dispenserStates) { dispenserStates ->
-            val entries = mutableListOf<Entry>()
-            if (dispenserStates.isEmpty()) LineDataSet(entries, "Urine Out")
-            else {
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Flow Rate"),
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+            urineOutDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
@@ -94,7 +115,11 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Urine Out")
-            }
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Urine Out"),
+                started = SharingStarted.WhileSubscribed(5000)
+            )
         }
     }
 

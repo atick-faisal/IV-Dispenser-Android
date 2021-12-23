@@ -50,7 +50,7 @@ interface DispenserDao {
     fun getDispenserWithStatesByDeviceId(deviceId: String): LiveData<DispenserWithStates?>
 
     @Query("SELECT * FROM dispenser_state_table WHERE device_id = :deviceId ORDER BY id DESC LIMIT :n")
-    fun getStatesByDeviceId(deviceId: String, n: Int): LiveData<List<DispenserState>>
+    fun getStatesByDeviceId(deviceId: String, n: Int): Flow<List<DispenserState>>
 
     @Query("DELETE FROM dispenser_table")
     suspend fun deleteAllDispensers()
