@@ -1,60 +1,81 @@
 package dev.atick.compose.ui.dashboard
 
-import androidx.lifecycle.*
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.compose.utils.getFloatTimestamp
 import dev.atick.core.ui.BaseViewModel
-import dev.atick.core.utils.Event
+import dev.atick.core.utils.extensions.stateInDelayed
 import dev.atick.data.database.room.DispenserDao
+import dev.atick.data.models.Command
 import dev.atick.data.models.DispenserState
+import dev.atick.mqtt.repository.MqttRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.math.min
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val dispenserDao: DispenserDao
+    savedStateHandle: SavedStateHandle,
+    private val dispenserDao: DispenserDao,
+    private val mqttRepository: MqttRepository
 ) : BaseViewModel() {
 
-    lateinit var dispenserStates: LiveData<List<DispenserState>>
-    lateinit var lastState: LiveData<DispenserState>
-    lateinit var urineLevel: LiveData<Float>
-    lateinit var urineOutDataset: LiveData<LineDataSet>
-    lateinit var flowRateDataset: LiveData<LineDataSet>
-    lateinit var dripRateDataset: LiveData<LineDataSet>
+    private var deviceId: String? = null
 
-    private val _flowRate = MutableLiveData<Event<Float>>()
-    val flowRate: LiveData<Event<Float>>
-        get() = _flowRate
+    lateinit var lastState: StateFlow<DispenserState>
+    lateinit var urineLevel: StateFlow<Float>
+    lateinit var urineOutDataset: StateFlow<LineDataSet>
+    lateinit var flowRateDataset: StateFlow<LineDataSet>
+    lateinit var dripRateDataset: StateFlow<LineDataSet>
 
     private val _sendingCommand = MutableLiveData<Boolean>()
-    val sendingCommand: LiveData<Boolean>
-        get() = _sendingCommand
+    val sendingCommand = mutableStateOf(false)
 
-    fun fetchDispenserStates(deviceId: String) {
-        dispenserStates = dispenserDao.getStatesByDeviceId(deviceId, 40)
-        lastState = Transformations.map(dispenserStates) {
-            if (it.isEmpty()) {
-                DispenserState(
-                    deviceId = " --- ",
-                    room = "101",
-                    dripRate = 0F,
-                    flowRate = 0F,
-                    urineOut = 0F
-                )
-            } else it.first()
+    private val emptyDispenserState = DispenserState(
+        deviceId = " --- ",
+        room = "101",
+        dripRate = 0F,
+        flowRate = 0F,
+        urineOut = 0F
+    )
+
+    init {
+        deviceId = savedStateHandle.get<String>("device_id")
+        deviceId?.let {
+            fetchDispenserStates(it)
         }
-        urineLevel = Transformations.map(dispenserStates) {
-            if (it.isEmpty()) 0F
-            else min(it.first().urineOut / 1000F, 1.0F)
-        }
-        dripRateDataset = Transformations.map(dispenserStates) { dispenserStates ->
-            val entries = mutableListOf<Entry>()
-            if (dispenserStates.isEmpty()) LineDataSet(entries, "Drip Rate")
-            else {
+    }
+
+    private fun fetchDispenserStates(deviceId: String) {
+        val dispenserStates = dispenserDao.getStatesByDeviceId(deviceId, 40)
+        viewModelScope.launch {
+            lastState = dispenserStates.map {
+                if (it.isEmpty()) emptyDispenserState
+                else it.first()
+            }.stateInDelayed(
+                scope = viewModelScope,
+                initialValue = emptyDispenserState
+            )
+
+            urineLevel = dispenserStates.map {
+                if (it.isEmpty()) 0F
+                else min(it.first().urineOut / 1000F, 1.0F)
+            }.stateInDelayed(
+                scope = viewModelScope,
+                initialValue = 0F
+            )
+
+            dripRateDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
                 dispenserStates.reversed().forEachIndexed { _, dispenserState ->
                     entries.add(
                         Entry(
@@ -64,13 +85,14 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Drip Rate")
-            }
-        }
-        flowRateDataset = Transformations.map(dispenserStates) { flowRateDataset ->
-            val entries = mutableListOf<Entry>()
-            if (flowRateDataset.isEmpty()) LineDataSet(entries, "Flow Rate")
-            else {
-                flowRateDataset.reversed().forEach { dispenserState ->
+            }.stateInDelayed(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Drip Rate")
+            )
+
+            flowRateDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
+                dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
                             getFloatTimestamp(dispenserState.timestamp),
@@ -79,12 +101,13 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Flow Rate")
-            }
-        }
-        urineOutDataset = Transformations.map(dispenserStates) { dispenserStates ->
-            val entries = mutableListOf<Entry>()
-            if (dispenserStates.isEmpty()) LineDataSet(entries, "Urine Out")
-            else {
+            }.stateInDelayed(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Flow Rate")
+            )
+
+            urineOutDataset = dispenserStates.map { dispenserStates ->
+                val entries = mutableListOf<Entry>()
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
@@ -94,21 +117,39 @@ class DashboardViewModel @Inject constructor(
                     )
                 }
                 LineDataSet(entries, "Urine Out")
-            }
+            }.stateInDelayed(
+                scope = viewModelScope,
+                initialValue = LineDataSet(listOf(), "Urine Out")
+            )
         }
     }
 
     fun setFlowRate(percent: Float) {
-        _flowRate.value = Event(percent)
+        if (mqttRepository.isClientConnected.value?.peekContent() == true) {
+            deviceId?.let { deviceId ->
+                sendingCommand()
+                mqttRepository.publish(
+                    topic = "dev.atick.mqtt/command/${deviceId}",
+                    message = Json.encodeToString(
+                        Command.serializer(),
+                        Command(
+                            deviceId = deviceId,
+                            flowRate = percent
+                        )
+                    ),
+                    onSuccess = { commandSent() }
+                )
+            }
+        }
     }
 
-    fun sendingCommand() {
+    private fun sendingCommand() {
         _sendingCommand.value = true
     }
 
     fun commandSent() {
         viewModelScope.launch {
-            delay(3000)
+            delay(3_000L)
             _sendingCommand.value = false
         }
     }

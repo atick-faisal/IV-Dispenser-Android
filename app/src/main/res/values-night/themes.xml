@@ -15,6 +15,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/dark_blue_gray</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/dark_blue_gray</item>
         <!-- Customize your theme here. -->
     </style>
 
