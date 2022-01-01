@@ -15,13 +15,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/dark_blue_gray</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:navigationBarColor">@color/dark_blue_gray</item>
+        <item name="android:navigationBarColor">@color/darker_blue_gray</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background_night</item>
-        <item name="android:statusBarColor">@color/dark_blue_gray</item>
+        <item name="android:statusBarColor">@color/darker_blue_gray</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/darker_blue_gray</item>
     </style>
 </resources>
