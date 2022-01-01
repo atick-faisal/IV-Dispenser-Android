@@ -18,7 +18,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MqttModule {
 
-    const val BROKER_URL = "broker.emqx.io"
+    // const val BROKER_URL = "broker.emqx.io"
+    const val BROKER_URL = "192.168.0.105"
+    const val BROKER_PORT = 1883
 
     @Singleton
     @Provides
@@ -26,7 +28,7 @@ object MqttModule {
         return Mqtt3Client.builder()
             .identifier(UUID.randomUUID().toString())
             .serverHost(BROKER_URL)
-            .serverPort(1883)
+            .serverPort(BROKER_PORT)
             .automaticReconnectWithDefaultConfig()
             .buildAsync()
     }
@@ -37,7 +39,7 @@ object MqttModule {
         return Mqtt5Client.builder()
             .identifier(UUID.randomUUID().toString())
             .serverHost(BROKER_URL)
-            .serverPort(1883)
+            .serverPort(BROKER_PORT)
             .automaticReconnectWithDefaultConfig()
             .buildAsync()
     }
