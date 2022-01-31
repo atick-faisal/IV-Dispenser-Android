@@ -26,29 +26,31 @@ fun SplashScreen(
         ,
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_splash_icon),
-            contentDescription = "",
-            modifier = Modifier
-                .width(160.dp)
-                .height(160.dp)
-        )
+        Column {
+            Image(
+                painter = painterResource(id = R.drawable.ic_splash_icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .width(160.dp)
+                    .height(160.dp)
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-        AndroidView(
-            factory = { ctx ->
-                LottieAnimationView(ctx).apply {
-                    setAnimation(R.raw.loader)
-                    repeatCount = ValueAnimator.INFINITE
-                    enableMergePathsForKitKatAndAbove(true)
-                    playAnimation()
-                }
-            },
-            modifier = Modifier
-                .width(160.dp)
-                .height(8.dp)
-                .fillMaxWidth()
-        )
+            AndroidView(
+                factory = { ctx ->
+                    LottieAnimationView(ctx).apply {
+                        setAnimation(R.raw.loader)
+                        repeatCount = ValueAnimator.INFINITE
+                        enableMergePathsForKitKatAndAbove(true)
+                        playAnimation()
+                    }
+                },
+                modifier = Modifier
+                    .width(160.dp)
+                    .height(8.dp)
+                    .fillMaxWidth()
+            )
+        }
     }
 }

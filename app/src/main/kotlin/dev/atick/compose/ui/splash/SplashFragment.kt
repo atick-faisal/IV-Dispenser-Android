@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
 import dev.atick.core.utils.extensions.observeEvent
+import dev.atick.core.utils.extensions.showToast
 import dev.atick.data.models.Login
 import dev.atick.mqtt.service.MqttService
 
@@ -26,11 +27,13 @@ class SplashFragment : BaseComposeFragment() {
     override fun observeStates() {
         super.observeStates()
         observeEvent(viewModel.login) { login ->
-            if (login.loginStatus) {
-                startMqttService(login)
-                navigateToHomeFragment()
-            }
+            if (login.loginStatus) startMqttService(login)
             else navigateToLoginFragment()
+        }
+
+        observeEvent(viewModel.isClientConnected) {
+            if (it) navigateToHomeFragment()
+            else context?.showToast("Connection Failed!")
         }
     }
 

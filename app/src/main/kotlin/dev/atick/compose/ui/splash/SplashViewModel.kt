@@ -8,6 +8,7 @@ import dev.atick.core.ui.BaseViewModel
 import dev.atick.core.utils.Event
 import dev.atick.data.database.datastore.AppSettings
 import dev.atick.data.models.Login
+import dev.atick.mqtt.repository.MqttRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,11 +17,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    appSettings: AppSettings
+    appSettings: AppSettings,
+    mqttRepository: MqttRepository
 ) : BaseViewModel() {
     private val _login = MutableLiveData<Event<Login>>()
     val login: LiveData<Event<Login>>
         get() = _login
+
+    val isClientConnected = mqttRepository.isClientConnected
 
     init {
         viewModelScope.launch {

@@ -28,7 +28,7 @@ inline fun setUpDefaultMqtt3Client(
     return Mqtt3Client.builder()
         .identifier(UUID.randomUUID().toString())
         .serverHost(MqttModule.BROKER_URL)
-        .serverPort(1883)
+        .serverPort(MqttModule.BROKER_PORT)
         .automaticReconnectWithDefaultConfig()
         .addConnectedListener { onConnected.invoke() }
         .addDisconnectedListener { onDisconnected.invoke() }
