@@ -27,8 +27,13 @@ class SplashFragment : BaseComposeFragment() {
     override fun observeStates() {
         super.observeStates()
         observeEvent(viewModel.login) { login ->
-            if (login.loginStatus) startMqttService(login)
-            else navigateToLoginFragment()
+            if (login.loginStatus) {
+                if (viewModel.isClientConnected.value?.peekContent() == true) {
+                    navigateToHomeFragment()
+                } else {
+                    startMqttService(login)
+                }
+            } else navigateToLoginFragment()
         }
 
         observeEvent(viewModel.isClientConnected) {
