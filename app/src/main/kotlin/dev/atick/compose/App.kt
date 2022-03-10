@@ -33,7 +33,8 @@ class App : Application() {
             ).apply {
                 description = "Always Monitor I/V Dispenser Statuses in the Background"
             }
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE)
+                    as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
         }
     }
@@ -47,7 +48,8 @@ class App : Application() {
             ).apply {
                 description = "Provide Alerts for Critical Situations"
             }
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE)
+                    as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
         }
     }
