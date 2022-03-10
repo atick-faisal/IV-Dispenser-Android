@@ -3,12 +3,9 @@ package dev.atick.compose
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.atick.core.utils.NetworkUtils
-import dev.atick.data.database.room.DispenserDao
 import dev.atick.mqtt.service.MqttService
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -54,16 +51,16 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_JetpackComposeStarter)
         setContentView(R.layout.activity_main)
         networkUtils = NetworkUtils(this)
-        networkUtils.isInternetAvailable.observe(this@MainActivity, {
+        networkUtils.isInternetAvailable.observe(this@MainActivity) {
             it?.let {
                 // debugMessage("INTERNET AVAILABLE [$it]")
             }
-        })
-        networkUtils.isWiFiAvailable.observe(this@MainActivity, {
+        }
+        networkUtils.isWiFiAvailable.observe(this@MainActivity) {
             it?.let {
                 // debugMessage("WIFI AVAILABLE [$it]")
             }
-        })
+        }
         // startMqttService()
     }
 

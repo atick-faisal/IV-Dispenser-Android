@@ -10,7 +10,6 @@ import dev.atick.data.database.datastore.AppSettings
 import dev.atick.data.models.Login
 import dev.atick.mqtt.repository.MqttRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

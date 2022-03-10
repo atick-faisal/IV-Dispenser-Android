@@ -14,8 +14,6 @@ import dev.atick.core.utils.extensions.debugMessage
 import dev.atick.data.database.room.DispenserDao
 import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
-import dev.atick.mqtt.utils.*
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
