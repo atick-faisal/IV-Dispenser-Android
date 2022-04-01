@@ -38,18 +38,13 @@ fun BottomMenuContent(
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Knob(
-            modifier = Modifier
-                .width(120.dp)
+
+        Column(
+            Modifier
+                .weight(0.6F)
                 .height(120.dp),
-            percent = flowPercentage,
-            onValueChange = onValueChange,
-            onFinalValue = onFinalValueChange
-        )
-
-        Spacer(modifier = Modifier.width(32.dp))
-
-        Column(Modifier.fillMaxWidth()) {
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
                 text = "Flow Rate",
                 fontSize = 20.sp
@@ -87,5 +82,17 @@ fun BottomMenuContent(
                 }
             }
         }
+
+        Spacer(modifier = Modifier.width(32.dp))
+
+        Knob(
+            modifier = Modifier
+                .weight(0.4F)
+//                .width(120.dp)
+                .height(120.dp),
+            percent = flowPercentage,
+            onValueChange = onValueChange,
+            onFinalValue = onFinalValueChange
+        )
     }
 }
