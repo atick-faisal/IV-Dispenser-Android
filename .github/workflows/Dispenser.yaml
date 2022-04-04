@@ -3,7 +3,7 @@ name: Dispenser
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - '.github/workflows/Dispenser.yaml'
   pull_request:
