@@ -11,7 +11,7 @@ on:
       - '.github/workflows/Dispenser.yaml'
 
 env:
-  SAMPLE_PATH: .
+  SAMPLE_PATH: /
 
 jobs:
   build:
