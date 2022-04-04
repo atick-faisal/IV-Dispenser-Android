@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object MqttModule {
 
     // const val BROKER_URL = "broker.emqx.io"
-    const val BROKER_URL = "192.168.0.102"
+    const val BROKER_URL = "192.168.31.161"
     const val BROKER_PORT = 1883
 
     @Singleton
