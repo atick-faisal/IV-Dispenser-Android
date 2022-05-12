@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">I/V Dispenser</string>
+    <string name="app_name">IVD Local</string>
     <string name="hint_username">Username</string>
     <string name="label_username">Username</string>
     <string name="label_password">Password</string>

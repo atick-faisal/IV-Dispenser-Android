@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33242753623188404" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.25625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
+        <entry key="mqtt/src/main/res/drawable/ic_alert.xml" value="0.291" />
       </map>
     </option>
   </component>
