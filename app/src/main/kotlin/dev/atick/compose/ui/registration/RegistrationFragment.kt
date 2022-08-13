@@ -1,14 +1,12 @@
 package dev.atick.compose.ui.registration
 
-import android.app.Activity
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import dev.atick.bluetooth.repository.BluetoothRepository
+import dev.atick.bluetooth.utils.BtUtils
 import dev.atick.compose.ui.theme.DispenserTheme
 import dev.atick.core.ui.BaseComposeFragment
 import dev.atick.core.utils.extensions.debugMessage
@@ -19,18 +17,8 @@ import javax.inject.Inject
 class RegistrationFragment : BaseComposeFragment() {
 
     @Inject
-    lateinit var bluetoothRepository: BluetoothRepository
+    lateinit var btUtils: BtUtils
     private val viewModel: RegistrationViewModel by viewModels()
-
-    private val resultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                viewModel.fetchPairedDevices()
-            }
-        }
-    }
 
     @Composable
     override fun ComposeUi() {
@@ -52,11 +40,11 @@ class RegistrationFragment : BaseComposeFragment() {
 
     override fun onStart() {
         super.onStart()
-        if (bluetoothRepository.isBluetoothAvailable()) {
-            requireActivity().debugMessage("Bluetooth is on")
+        if (btUtils.isBluetoothAvailable(requireActivity())) {
+            requireContext().debugMessage("Bluetooth is on")
             viewModel.fetchPairedDevices()
         } else {
-            bluetoothRepository.enableBluetooth(resultLauncher)
+            btUtils.setupBluetooth(requireActivity())
         }
     }
 

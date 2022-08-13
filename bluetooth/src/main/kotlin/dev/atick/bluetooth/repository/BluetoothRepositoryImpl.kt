@@ -3,8 +3,6 @@ package dev.atick.bluetooth.repository
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.orhanobut.logger.Logger
@@ -30,19 +28,6 @@ class BluetoothRepositoryImpl @Inject constructor(
 
     private var mmSocket: BluetoothSocket? = null
     private val mmBuffer: ByteArray = ByteArray(1024)
-
-    override fun isBluetoothAvailable(): Boolean {
-        return bluetoothAdapter?.isEnabled ?: false
-    }
-
-    override fun enableBluetooth(resultLauncher: ActivityResultLauncher<Intent>) {
-        bluetoothAdapter?.let {
-            if (!it.isEnabled) {
-                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                resultLauncher.launch(enableBtIntent)
-            }
-        }
-    }
 
     override fun getPairedDevicesList(): List<BluetoothDevice> {
         val bondedDevices = bluetoothAdapter?.bondedDevices

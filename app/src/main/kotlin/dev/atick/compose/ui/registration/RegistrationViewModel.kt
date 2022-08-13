@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.atick.bluetooth.repository.BluetoothRepository
+import dev.atick.bluetooth.utils.BtUtils
 import dev.atick.core.ui.BaseViewModel
 import dev.atick.data.models.Response
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
+    private val btUtils: BtUtils,
     private val bluetoothRepository: BluetoothRepository
 ) : BaseViewModel() {
     val incomingMessage = bluetoothRepository.incomingMessage
@@ -33,10 +35,8 @@ class RegistrationViewModel @Inject constructor(
         get() = _isRegistrationComplete
 
     fun fetchPairedDevices() {
-        if (bluetoothRepository.isBluetoothAvailable()) {
-            viewModelScope.launch {
-                _pairedDevices.value = bluetoothRepository.getPairedDevicesList()
-            }
+        viewModelScope.launch {
+            _pairedDevices.value = bluetoothRepository.getPairedDevicesList()
         }
     }
 

@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "dev.atick.dispenser",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 7,
+      "versionName": "2.1.1",
+      "outputFile": "app_release_v2.1.1_13.08.2022 07.09 AM.apk"
+    }
+  ],
+  "elementType": "File"
+}
