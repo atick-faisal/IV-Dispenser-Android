@@ -74,6 +74,9 @@ class BtUtilsImpl @Inject constructor(
                 )
             )
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
         permissionLauncher.launch(permissions.toTypedArray())
     }
 
