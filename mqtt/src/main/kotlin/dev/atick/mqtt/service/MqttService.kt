@@ -1,5 +1,6 @@
 package dev.atick.mqtt.service
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
@@ -16,6 +17,7 @@ import dev.atick.mqtt.R
 import dev.atick.mqtt.repository.MqttRepository
 import javax.inject.Inject
 
+@SuppressLint("MissingPermission")
 @AndroidEntryPoint
 class MqttService : BaseService() {
 
