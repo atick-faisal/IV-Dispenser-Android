@@ -1,5 +1,6 @@
 package dev.atick.compose.ui.registration.components
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothClass.Device.Major.COMPUTER
 import android.bluetooth.BluetoothDevice
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.atick.bluetooth.utils.extensions.getDeviceIcon
 
+@SuppressLint("MissingPermission")
 @Composable
 fun DeviceInfo(
     modifier: Modifier = Modifier,
