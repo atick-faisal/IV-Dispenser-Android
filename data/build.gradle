@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
@@ -39,7 +40,7 @@ dependencies {
     // ... Room
     api("androidx.room:room-runtime:$room_version")
     api("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
     // ... Datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
