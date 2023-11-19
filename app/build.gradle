@@ -82,7 +82,7 @@ dependencies {
     implementation project(path: ':bluetooth')
 
     // ... Lottie
-    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation("com.airbnb.android:lottie:6.2.0")
 
     // ... Chart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
