@@ -82,13 +82,13 @@ dependencies {
     implementation project(path: ':bluetooth')
 
     // ... Lottie
-    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation("com.airbnb.android:lottie:6.2.0")
 
     // ... Chart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
 
     // ... Google Analytics
-    implementation platform("com.google.firebase:firebase-bom:32.3.1")
+    implementation platform("com.google.firebase:firebase-bom:32.7.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
