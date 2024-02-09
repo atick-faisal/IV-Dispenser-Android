@@ -15,7 +15,7 @@ buildscript {
         nav_version = "2.7.7"
         room_version = "2.6.1"
         hilt_version = "2.50"
-        google_services_version = "4.4.0"
+        google_services_version = "4.4.1"
         crashlytics_version = "2.9.9"
         ksp_version = "1.9.22-1.0.17"
     }
