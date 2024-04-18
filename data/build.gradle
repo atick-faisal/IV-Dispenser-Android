@@ -43,7 +43,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 
     // ... Datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
