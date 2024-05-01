@@ -49,12 +49,12 @@ android {
 dependencies {
 
     // ... Core
-    api("androidx.core:core-ktx:1.13.0")
+    api("androidx.core:core-ktx:1.13.1")
     api("androidx.appcompat:appcompat:1.6.1")
     api("com.google.android.material:material:1.11.0")
 
     // ... Fragment
-    api("androidx.fragment:fragment-ktx:1.6.2")
+    api("androidx.fragment:fragment-ktx:1.7.0")
 
     // ... Jetpack Compose
     api("androidx.compose.ui:ui:$compose_version")
