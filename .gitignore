@@ -91,3 +91,6 @@ lint/tmp/
 
 # Google Services
 google-services.json
+
+# kotlin 2.0
+.kotlin
