@@ -29,7 +29,7 @@ import dev.atick.compose.ui.dashboard.components.DashboardContent
 fun DashboardScreen(
     viewModel: DashboardViewModel = viewModel()
 ) {
-    var flowPercentage by remember { mutableStateOf(0.5F) }
+    var flowPercentage by remember { mutableFloatStateOf(0.5F) }
     var isBottomMenuOpen by rememberSaveable { mutableStateOf(false) }
 
     val dispenserState by viewModel.lastState.collectAsState()
