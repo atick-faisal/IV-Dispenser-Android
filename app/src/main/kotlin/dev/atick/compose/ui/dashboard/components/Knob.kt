@@ -27,23 +27,23 @@ fun Knob(
     onFinalValue: (Float) -> Unit
 ) {
     var rotation by remember {
-        mutableStateOf(percent * (360F - 2 * limitingAngle) + limitingAngle)
+        mutableFloatStateOf(percent * (360F - 2 * limitingAngle) + limitingAngle)
     }
     var newPercentage by remember {
-        mutableStateOf(0F)
+        mutableFloatStateOf(0F)
     }
 
     var touchX by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     var touchY by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     var centerX by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     var centerY by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
 
     Image(
