@@ -79,7 +79,7 @@ dependencies {
     api("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // ... Serialization
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
