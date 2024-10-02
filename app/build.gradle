@@ -86,7 +86,7 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
 
     // ... Google Analytics
-    implementation platform("com.google.firebase:firebase-bom:33.3.0")
+    implementation platform("com.google.firebase:firebase-bom:33.4.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
