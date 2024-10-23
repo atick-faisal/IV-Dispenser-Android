@@ -16,7 +16,7 @@ buildscript {
         hilt_version = "2.52"
         google_services_version = "4.4.2"
         crashlytics_version = "3.0.2"
-        ksp_version = "2.0.21-1.0.25"
+        ksp_version = "2.0.21-1.0.26"
     }
 }
 
