@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
@@ -80,17 +80,17 @@ dependencies {
     implementation project(path: ':bluetooth')
 
     // ... Lottie
-    implementation("com.airbnb.android:lottie:6.5.2")
+    implementation("com.airbnb.android:lottie:6.6.1")
 
     // ... Chart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
 
     // ... Google Analytics
-    implementation platform("com.google.firebase:firebase-bom:33.3.0")
+    implementation platform("com.google.firebase:firebase-bom:33.7.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // ... Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    ksp("com.google.dagger:hilt-android-compiler:$hilt_version")
 }

@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("com.google.devtools.ksp")
-    id("kotlin-kapt")
     id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
 }
@@ -47,9 +46,5 @@ dependencies {
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
-}
-
-kapt {
-    correctErrorTypes = true
+    ksp("com.google.dagger:hilt-android-compiler:$hilt_version")
 }
