@@ -62,7 +62,7 @@ dependencies {
     api("androidx.compose.material:material-icons-core:$compose_version")
     api("androidx.compose.material:material-icons-extended:$compose_version")
     api("androidx.compose.runtime:runtime-livedata:$compose_version")
-    api("androidx.activity:activity-compose:1.9.3")
+    api("androidx.activity:activity-compose:1.10.0")
 
     // ... Lifecycle
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
