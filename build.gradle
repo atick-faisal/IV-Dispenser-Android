@@ -7,7 +7,7 @@ buildscript {
         version_name = "2.1.1"
 
         agp_version = "8.9.0"
-        kotlin_version = "2.1.10"
+        kotlin_version = "2.1.20"
 
         compose_version = "1.7.8"
         lifecycle_version = "2.8.7"
@@ -16,7 +16,7 @@ buildscript {
         hilt_version = "2.56"
         google_services_version = "4.4.2"
         crashlytics_version = "3.0.3"
-        ksp_version = "2.1.10-1.0.31"
+        ksp_version = "2.1.20-1.0.31"
     }
 }
 
