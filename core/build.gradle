@@ -55,13 +55,14 @@ dependencies {
     api("androidx.fragment:fragment-ktx:1.8.6")
 
     // ... Jetpack Compose
-    api("androidx.compose.ui:ui:$compose_version")
-    api("androidx.compose.ui:ui-tooling:$compose_version")
-    api("androidx.compose.foundation:foundation:$compose_version")
-    api("androidx.compose.material:material:$compose_version")
-    api("androidx.compose.material:material-icons-core:$compose_version")
-    api("androidx.compose.material:material-icons-extended:$compose_version")
-    api("androidx.compose.runtime:runtime-livedata:$compose_version")
+    api(platform("androidx.compose:compose-bom:$compose_bom_version"))
+    api("androidx.compose.ui:ui")
+    api("androidx.compose.ui:ui-tooling")
+    api("androidx.compose.foundation:foundation")
+    api("androidx.compose.material:material")
+    api("androidx.compose.material:material-icons-core")
+    api("androidx.compose.material:material-icons-extended")
+    api("androidx.compose.runtime:runtime-livedata")
     api("androidx.activity:activity-compose:1.10.1")
 
     // ... Lifecycle
