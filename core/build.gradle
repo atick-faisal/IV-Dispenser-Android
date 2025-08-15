@@ -47,12 +47,12 @@ android {
 dependencies {
 
     // ... Core
-    api("androidx.core:core-ktx:1.16.0")
+    api("androidx.core:core-ktx:1.17.0")
     api("androidx.appcompat:appcompat:1.7.1")
     api("com.google.android.material:material:1.12.0")
 
     // ... Fragment
-    api("androidx.fragment:fragment-ktx:1.8.8")
+    api("androidx.fragment:fragment-ktx:1.8.9")
 
     // ... Jetpack Compose
     api(platform("androidx.compose:compose-bom:$compose_bom_version"))
@@ -80,7 +80,7 @@ dependencies {
     api("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // ... Serialization
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
