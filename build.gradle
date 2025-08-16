@@ -1,22 +1,22 @@
 buildscript {
     ext {
-        compile_sdk_version = 35
+        compile_sdk_version = 36
         min_sdk_version = 24
-        target_sdk_version = 35
+        target_sdk_version = 36
         version_code = 7
         version_name = "2.1.1"
 
-        agp_version = "8.10.1"
-        kotlin_version = "2.1.21"
+        agp_version = "8.12.0"
+        kotlin_version = "2.2.10"
 
-        compose_bom_version = "2025.06.01"
-        lifecycle_version = "2.9.1"
-        nav_version = "2.9.0"
+        compose_bom_version = "2025.08.00"
+        lifecycle_version = "2.9.2"
+        nav_version = "2.9.3"
         room_version = "2.7.2"
-        hilt_version = "2.56.2"
-        google_services_version = "4.4.2"
-        crashlytics_version = "3.0.4"
-        ksp_version = "2.1.21-2.0.2"
+        hilt_version = "2.57"
+        google_services_version = "4.4.3"
+        crashlytics_version = "3.0.6"
+        ksp_version = "2.2.10-2.0.2"
     }
 }
 
