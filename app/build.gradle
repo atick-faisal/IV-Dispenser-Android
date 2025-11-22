@@ -1,3 +1,5 @@
+import androidx.navigation.safeargs.gradle.ArgumentsGenerationTask
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -93,4 +95,10 @@ dependencies {
     // ... Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     ksp("com.google.dagger:hilt-android-compiler:$hilt_version")
+}
+
+// FIXME: Disabled configuration cache for safe-args plugin
+//  https://issuetracker.google.com/issues/458071608
+tasks.withType(ArgumentsGenerationTask).configureEach {
+    notCompatibleWithConfigurationCache("Kotlin plugin FutureImpl not serializable yet")
 }
