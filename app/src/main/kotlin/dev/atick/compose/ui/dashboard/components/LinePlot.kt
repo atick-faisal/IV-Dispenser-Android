@@ -4,7 +4,9 @@ import android.graphics.Color
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -24,6 +26,7 @@ fun LinePlot(
 
     val isDarkThemeEnabled = isSystemInDarkTheme()
     val context = LocalContext.current
+    val primaryColor = colorResource(R.color.primary).toArgb()
 
     AndroidView(
         factory = { ctx ->
@@ -65,9 +68,9 @@ fun LinePlot(
                 Color.DKGRAY
             }
             dataset.apply {
-                color = context.getColor(R.color.primary)
+                color = primaryColor
                 if (isDarkThemeEnabled) {
-                    this.fillColor = context.getColor(R.color.primary)
+                    this.fillColor = primaryColor
                     this.fillAlpha = 40
                 } else {
                     this.fillDrawable = ContextCompat.getDrawable(
