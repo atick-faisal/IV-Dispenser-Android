@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":data"))
 
     // ... HiveMq
-    api("com.hivemq:hivemq-mqtt-client:1.3.10")
+    api("com.hivemq:hivemq-mqtt-client:1.3.12")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
