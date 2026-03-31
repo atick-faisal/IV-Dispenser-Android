@@ -1,8 +1,8 @@
 import androidx.navigation.safeargs.gradle.ArgumentsGenerationTask
+import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
     id("androidx.navigation.safeargs.kotlin")
@@ -16,7 +16,7 @@ android {
     def date = new Date()
     def formattedDate = date.format('dd.MM.yyyy hh.mm a')
 
-    compileSdk rootProject.ext.compile_sdk_version
+    compileSdk = rootProject.ext.compile_sdk_version
 
     defaultConfig {
         applicationId "dev.atick.dispenser"
@@ -33,33 +33,33 @@ android {
 
     buildTypes {
         Properties properties = new Properties()
+
+        // FIXME: applicationVariants API is no longer available in AGP 9.0.0, need to find an alternative way
+        //  to rename the output APK file
         
         debug {
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "${"app_" + variant.buildType.name + "_v" + variant.versionName + "_" + formattedDate}.apk"
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.all {
+//                    outputFileName = "${"app_" + variant.buildType.name + "_v" + variant.versionName + "_" + formattedDate}.apk"
+//                }
+//            }
             buildConfigField "String", "BROKER_URL", properties.getProperty("BROKER_URL", "\"\"")
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "${"app_" + variant.buildType.name + "_v" + variant.versionName + "_" + formattedDate}.apk"
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.all {
+//                    outputFileName = "${"app_" + variant.buildType.name + "_v" + variant.versionName + "_" + formattedDate}.apk"
+//                }
+//            }
             buildConfigField "String", "BROKER_URL", properties.getProperty("BROKER_URL", "\"\"")
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
     }
     buildFeatures {
         compose true
@@ -88,7 +88,7 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
 
     // ... Google Analytics
-    implementation platform("com.google.firebase:firebase-bom:34.6.0")
+    implementation platform("com.google.firebase:firebase-bom:34.11.0")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")
 
