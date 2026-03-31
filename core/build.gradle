@@ -47,7 +47,7 @@ android {
 dependencies {
 
     // ... Core
-    api("androidx.core:core-ktx:1.17.0")
+    api("androidx.core:core-ktx:1.18.0")
     api("androidx.appcompat:appcompat:1.7.1")
     api("com.google.android.material:material:1.13.0")
 
@@ -63,7 +63,7 @@ dependencies {
     api("androidx.compose.material:material-icons-core")
     api("androidx.compose.material:material-icons-extended")
     api("androidx.compose.runtime:runtime-livedata")
-    api("androidx.activity:activity-compose:1.12.1")
+    api("androidx.activity:activity-compose:1.13.0")
 
     // ... Lifecycle
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -80,7 +80,7 @@ dependencies {
     api("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // ... Serialization
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
     // ... Dagger Hilt
     api("com.google.dagger:hilt-android:$hilt_version")
