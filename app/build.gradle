@@ -1,5 +1,4 @@
 import androidx.navigation.safeargs.gradle.ArgumentsGenerationTask
-import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
     id("com.android.application")
@@ -13,9 +12,6 @@ plugins {
 }
 
 android {
-    def date = new Date()
-    def formattedDate = date.format('dd.MM.yyyy hh.mm a')
-
     compileSdk = rootProject.ext.compile_sdk_version
 
     defaultConfig {
