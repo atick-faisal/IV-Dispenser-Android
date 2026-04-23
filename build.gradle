@@ -6,17 +6,17 @@ buildscript {
         version_code = 7
         version_name = "2.1.1"
 
-        agp_version = "9.1.1"
-        kotlin_version = "2.3.20"
+        agp_version = "9.2.0"
+        kotlin_version = "2.3.21"
 
-        compose_bom_version = "2026.03.01"
+        compose_bom_version = "2026.04.01"
         lifecycle_version = "2.10.0"
-        nav_version = "2.9.7"
+        nav_version = "2.9.8"
         room_version = "2.8.4"
         hilt_version = "2.59.2"
         google_services_version = "4.4.4"
         crashlytics_version = "3.0.7"
-        ksp_version = "2.3.6"
+        ksp_version = "2.3.7"
     }
 }
 
