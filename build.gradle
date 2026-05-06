@@ -6,7 +6,7 @@ buildscript {
         version_code = 7
         version_name = "2.1.1"
 
-        agp_version = "9.2.0"
+        agp_version = "9.2.1"
         kotlin_version = "2.3.21"
 
         compose_bom_version = "2026.04.01"
