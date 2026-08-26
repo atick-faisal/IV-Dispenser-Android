@@ -44,11 +44,11 @@ dependencies {
 
     // ... Core
     api("androidx.core:core-ktx:1.19.0")
-    api("androidx.appcompat:appcompat:1.7.1")
+    api("androidx.appcompat:appcompat:1.8.0")
     api("com.google.android.material:material:1.14.0")
 
     // ... Fragment
-    api("androidx.fragment:fragment-ktx:1.8.9")
+    api("androidx.fragment:fragment-ktx:1.9.0")
 
     // ... Jetpack Compose
     api(platform("androidx.compose:compose-bom:$compose_bom_version"))
