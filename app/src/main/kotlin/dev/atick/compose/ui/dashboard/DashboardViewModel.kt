@@ -33,9 +33,9 @@ class DashboardViewModel @Inject constructor(
 
     lateinit var lastState: StateFlow<DispenserState>
     lateinit var urineLevel: StateFlow<Float>
-    lateinit var urineOutDataset: StateFlow<LineDataSet>
-    lateinit var flowRateDataset: StateFlow<LineDataSet>
-    lateinit var dripRateDataset: StateFlow<LineDataSet>
+    lateinit var urineOutDataset: StateFlow<LineDataSet<Nothing>>
+    lateinit var flowRateDataset: StateFlow<LineDataSet<Nothing>>
+    lateinit var dripRateDataset: StateFlow<LineDataSet<Nothing>>
 
     private val _sendingCommand = MutableLiveData<Boolean>()
     val sendingCommand = mutableStateOf(false)
@@ -75,7 +75,7 @@ class DashboardViewModel @Inject constructor(
             )
 
             dripRateDataset = dispenserStates.map { dispenserStates ->
-                val entries = mutableListOf<Entry>()
+                val entries = mutableListOf<Entry<Nothing>>()
                 dispenserStates.reversed().forEachIndexed { _, dispenserState ->
                     entries.add(
                         Entry(
@@ -87,11 +87,11 @@ class DashboardViewModel @Inject constructor(
                 LineDataSet(entries, "Drip Rate")
             }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Drip Rate")
+                initialValue = LineDataSet<Nothing>(listOf(), "Drip Rate")
             )
 
             flowRateDataset = dispenserStates.map { dispenserStates ->
-                val entries = mutableListOf<Entry>()
+                val entries = mutableListOf<Entry<Nothing>>()
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
@@ -103,11 +103,11 @@ class DashboardViewModel @Inject constructor(
                 LineDataSet(entries, "Flow Rate")
             }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Flow Rate")
+                initialValue = LineDataSet<Nothing>(listOf(), "Flow Rate")
             )
 
             urineOutDataset = dispenserStates.map { dispenserStates ->
-                val entries = mutableListOf<Entry>()
+                val entries = mutableListOf<Entry<Nothing>>()
                 dispenserStates.reversed().forEach { dispenserState ->
                     entries.add(
                         Entry(
@@ -119,7 +119,7 @@ class DashboardViewModel @Inject constructor(
                 LineDataSet(entries, "Urine Out")
             }.stateInDelayed(
                 scope = viewModelScope,
-                initialValue = LineDataSet(listOf(), "Urine Out")
+                initialValue = LineDataSet<Nothing>(listOf(), "Urine Out")
             )
         }
     }
