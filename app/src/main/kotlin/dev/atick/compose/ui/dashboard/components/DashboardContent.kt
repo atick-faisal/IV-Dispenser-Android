@@ -20,9 +20,9 @@ import dev.atick.data.models.DispenserState
 fun DashboardContent(
     modifier: Modifier = Modifier,
     dispenserState: DispenserState?,
-    urineOutDataset: LineDataSet,
-    flowRateDataset: LineDataSet,
-    dripRateDataset: LineDataSet,
+    urineOutDataset: LineDataSet<Nothing>,
+    flowRateDataset: LineDataSet<Nothing>,
+    dripRateDataset: LineDataSet<Nothing>,
     urineLevel: Float
 ) {
     val scrollState = rememberScrollState()

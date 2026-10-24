@@ -13,14 +13,14 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.utils.Utils
 import dev.atick.compose.R
 import dev.atick.compose.utils.getFormattedDateTime
 
 @Composable
 fun LinePlot(
-    dataset: LineDataSet,
+    dataset: LineDataSet<Nothing>,
     modifier: Modifier = Modifier
 ) {
 
@@ -33,26 +33,23 @@ fun LinePlot(
             Utils.init(ctx)
             LineChart(ctx).apply {
                 description.text = ""
-                axisLeft.setDrawLabels(false)
                 axisLeft.isEnabled = true
-                axisLeft.setDrawGridLines(false)
+                axisLeft.isDrawGridLinesEnabled = false
                 axisLeft.axisLineWidth = 2.0F
-                axisLeft.setDrawLabels(true)
+                axisLeft.isDrawLabelsEnabled = true
                 axisLeft.labelCount = 4
-                axisRight.setDrawLabels(false)
+                axisRight.isDrawLabelsEnabled = false
                 axisRight.isEnabled = false
-                xAxis.setDrawLabels(true)
+                xAxis.isDrawLabelsEnabled = true
                 xAxis.isEnabled = true
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
-                xAxis.setDrawGridLines(false)
+                xAxis.isDrawGridLinesEnabled = false
                 xAxis.axisLineWidth = 2.0F
-                xAxis.valueFormatter = object : IndexAxisValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return getFormattedDateTime(value)
-                    }
+                xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
+                    getFormattedDateTime(value)
                 }
                 legend.isEnabled = false
-                setTouchEnabled(false)
+                isTouchEnabled = false
             }
         },
         update = { lineChart ->
@@ -78,16 +75,13 @@ fun LinePlot(
                         R.drawable.green_gradient
                     )
                 }
-                setDrawValues(false)
-                setDrawFilled(true)
-                setDrawCircleHole(false)
-                setDrawCircles(false)
+                isDrawValuesEnabled = false
+                isDrawFilledEnabled = true
+                isDrawCircleHoleEnabled = false
+                isDrawCirclesEnabled = false
                 lineWidth = 3.0F
             }
-            val lineData = LineData(dataset)
-            lineData.notifyDataChanged()
-            lineChart.data = lineData
-            lineChart.invalidate()
+            lineChart.data = LineData(dataset)
         },
         modifier = modifier
     )
