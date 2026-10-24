@@ -19,7 +19,7 @@ fun SensorCard(
     title: String,
     value: String,
     lastUpdated: Long,
-    lineDataset: LineDataSet,
+    lineDataset: LineDataSet<Nothing>,
     animatedIcon: @Composable () -> Unit
 ) {
     Card(
